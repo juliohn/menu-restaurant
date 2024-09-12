@@ -1,21 +1,21 @@
-interface BurguerItemOptionprops {
-  title: string;
+interface ProductItemOptionprops {
+  name: string;
   price: string;
   handleOptionChange: (id: string) => void;
   isSelected: boolean;
   value: string;
 }
-export function BurguerItemOption({
-  title,
+export function ProductItemOption({
+  name,
   price,
   handleOptionChange,
   isSelected,
   value,
-}: BurguerItemOptionprops) {
+}: ProductItemOptionprops) {
   return (
     <label className="flex items-center py-2 ">
       <div className="flex-grow flex flex-col">
-        <p className="font-medium text-black text-base">{title}</p>
+        <p className="font-medium text-black text-base">{name}</p>
         <span className="text-gray-40 font-normal text-base">R$ {price}</span>
       </div>
 

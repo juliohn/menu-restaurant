@@ -6,7 +6,7 @@ export function InputSearch() {
       <Search className="h-5 w-5 text-gray-1200" />
       <input
         placeholder="Search menu items"
-        className="flex-1 border-0 bg-transparent p-0 text-black placeholder-gray-1200"
+        className="flex-1 border-0 bg-transparent p-0 text-black placeholder-gray-20 focus:outline-none focus:ring-0"
       />
     </div>
   );

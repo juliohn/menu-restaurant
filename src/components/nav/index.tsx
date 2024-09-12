@@ -6,7 +6,7 @@ export function Nav() {
   return (
     <nav
       className={
-        " w-full mx-auto flex items-center  py-2 h-16 bg-brown500 fixed top-0"
+        " w-full mx-auto flex items-center  py-2 h-16 bg-primary fixed top-0"
       }
     >
       <div className="grow">

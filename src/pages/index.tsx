@@ -1,16 +1,52 @@
 import { useState } from "react";
-
-import Image from "next/image";
+import { GetStaticProps } from "next";
 
 import { Category } from "@/components/Category";
 import { InputSearch } from "@/components/InputSearch";
-import { ChevronUp } from "lucide-react";
-import { BurguerItem } from "@/components/BurguerItem";
+import { ProductItem } from "@/components/ProductItem";
 import { DrinkItem } from "@/components/DrinkItem";
 import { ResumeBasket } from "@/components/ResumeBasket";
 
-export default function Home() {
-  const [isActiveCategory, setIsActiveCategory] = useState<string>("242403");
+import { ProductProps } from "./product/types";
+
+import { ChevronUp, ReplyAll } from "lucide-react";
+
+import { api } from "@/api/axios";
+
+interface CategoriesProps {
+  id: string;
+  title: string;
+  imageUrl: string;
+}
+
+interface DrinksProps {
+  id: string;
+  price: string;
+  title: string;
+}
+
+interface DessertsProps {
+  id: string;
+  price: string;
+  imageUrl: string;
+  title: string;
+}
+
+interface DataProps {
+  categories?: CategoriesProps[];
+  burguers?: ProductProps[];
+  drinks?: DrinksProps[];
+  desserts?: DessertsProps[];
+}
+
+export default function Home({
+  categories,
+  burguers,
+  drinks,
+  desserts,
+}: DataProps) {
+  const [isActiveCategory, setIsActiveCategory] = useState("");
+
   return (
     <div className="">
       <InputSearch />
@@ -18,81 +54,73 @@ export default function Home() {
       <div className="flex gap-6 mt-2">
         <div className="md:w-3/5  md:px-4 bg-white">
           <div className="flex mt-4 w-full item-center gap-4">
-            <Category
-              id={"242403"}
-              imageUrl="https://preodemo.gumlet.io/usr/venue/7602/section/646fbe4c64a6f.png"
-              title="Burguers"
-              isActive={isActiveCategory === "242403"}
-              onClick={setIsActiveCategory}
-            />
-            <Category
-              id={"242404"}
-              imageUrl="https://preodemo.gumlet.io/usr/venue/7602/section/646fbe5dc1bf3.png"
-              title="Drinks"
-              isActive={isActiveCategory === "242404"}
-              onClick={setIsActiveCategory}
-            />
-            <Category
-              id={"242405"}
-              imageUrl="https://preodemo.gumlet.io/usr/venue/7602/section/646fbe93cb615.png"
-              title="Desserts"
-              isActive={isActiveCategory === "242405"}
-              onClick={setIsActiveCategory}
-            />
+            {categories!.map((category) => {
+              return (
+                <Category
+                  key={category.id}
+                  id={category.id}
+                  imageUrl={category.imageUrl}
+                  title={category.title}
+                  isActive={isActiveCategory === category.id}
+                  onClick={() => setIsActiveCategory(category.id.toString())}
+                />
+              );
+            })}
+            {isActiveCategory !== "" && (
+              <a onClick={() => setIsActiveCategory("")}>
+                <ReplyAll />
+                {typeof isActiveCategory}
+              </a>
+            )}
           </div>
 
-          <div className="flex justify-between items-center ">
-            <h1 className="text-black font-medium text-2xl">Burguers</h1>
-            <ChevronUp className="text-black" />
-          </div>
+          {(isActiveCategory === burguers!.sectionId ||
+            isActiveCategory === "") && (
+            <>
+              <div className="flex justify-between items-center ">
+                <h1 className="text-black font-medium text-2xl">Burguers</h1>
+                <ChevronUp className="text-black" />
+              </div>
 
-          <div className="h-auto flex flex-col  gap-8  mt-8">
-            <BurguerItem
-              price="33,90"
-              imageUrl="https://preodemo.gumlet.io/usr/venue/7602/menuItem/646fbe292998e.png"
-              title="Hardcore"
-              description="180g angus beef burger, plus ribs, gruyere cheese 180g angus"
-            />
-            <BurguerItem
-              price="33,90"
-              imageUrl="https://preodemo.gumlet.io/usr/venue/7602/menuItem/646fbe292998e.png"
-              title="Hardcore"
-              description="180g angus beef burger, plus ribs, gruyere cheese 180g angus"
-            />
+              <div className="h-auto flex flex-col  gap-8  mt-8">
+                {burguers!.data.map((burguer: ProductProps) => {
+                  return <ProductItem key={burguer.id} item={burguer} />;
+                })}
+              </div>
+            </>
+          )}
 
-            <BurguerItem
-              price="33,90"
-              imageUrl="https://preodemo.gumlet.io/usr/venue/7602/menuItem/646fbe292998e.png"
-              title="Hardcore"
-              description="180g angus beef burger, plus ribs, gruyere cheese 180g angus"
-            />
-          </div>
+          {(isActiveCategory === drinks!.sectionId ||
+            isActiveCategory === "") && (
+            <>
+              <div className="flex justify-between items-center mt-8">
+                <h1 className="text-black font-medium text-2xl">Drinks</h1>
+                <ChevronUp className="text-black" />
+              </div>
 
-          <div className="flex justify-between items-center mt-8">
-            <h1 className="text-black font-medium text-2xl">Drinks</h1>
-            <ChevronUp className="text-black" />
-          </div>
+              <div className="h-auto flex flex-col  gap-8  mt-8">
+                {drinks!.data.map((drink) => {
+                  return <DrinkItem key={drink.id} item={drink} />;
+                })}
+              </div>
+            </>
+          )}
 
-          <div className="h-auto flex flex-col  gap-8  mt-8">
-            <DrinkItem
-              price="49,80"
-              title="Caipirinha"
-              description="with sugar cane liquor loren with sugar cane liquor loren with sugar cane liquor loren with sugar cane liquor loren"
-            />
+          {(isActiveCategory === desserts!.sectionId ||
+            isActiveCategory === "") && (
+            <>
+              <div className="flex justify-between items-center mt-8">
+                <h1 className="text-black font-medium text-2xl">Desserts</h1>
+                <ChevronUp className="text-black" />
+              </div>
 
-            <DrinkItem price="13,00" title="Red label" />
-
-            <DrinkItem
-              price="10,00"
-              title="Smirnoff"
-              description="with sugar cane liquor"
-            />
-            <DrinkItem
-              price="12,00"
-              title="Pink Lemonade"
-              description="Lemonade whipped with cherries and berries."
-            />
-          </div>
+              <div className="h-auto flex flex-col  gap-8  mt-8 md:mb-8">
+                {desserts!.data!.map((dessert: ProductProps) => {
+                  return <ProductItem key={dessert.id} item={dessert} />;
+                })}
+              </div>
+            </>
+          )}
         </div>
 
         <div className="w-2/5 bg-blue10 hidden md:flex flex-col">
@@ -105,3 +133,87 @@ export default function Home() {
     </div>
   );
 }
+
+export const getStaticProps: GetStaticProps<DataProps> = async () => {
+  try {
+    const response = await api.get("challenge/menu");
+    const data = response.data;
+
+    const categories = data.sections.map((item) => {
+      return {
+        ...item,
+        imageUrl: item.images[0].image,
+      };
+    });
+
+    const burguers = {
+      sectionId: data.sections[0].id.toString(),
+      data: data.sections[0].items.map((item) => {
+        const modifiers =
+          item.modifiers === undefined
+            ? [
+                {
+                  id: item.id,
+                  items: [{ ...item }],
+                },
+              ]
+            : item.modifiers;
+
+        return {
+          ...item,
+          imageUrl: item.images[0].image,
+          modifiers,
+        };
+      }),
+    };
+
+    const drinks = {
+      sectionId: data.sections[1].id.toString(),
+      data: data.sections[1].items.map((item) => {
+        return {
+          ...item,
+        };
+      }),
+    };
+
+    const desserts = {
+      sectionId: data.sections[2].id.toString(),
+      data: data.sections[2].items.map((item) => {
+        const modifiers = [
+          {
+            id: item.id,
+            items: [{ ...item }],
+          },
+        ];
+
+        return {
+          ...item,
+          imageUrl: item.images[0].image,
+          modifiers,
+        };
+      }),
+    };
+
+    return {
+      props: {
+        categories,
+        burguers,
+        drinks,
+        desserts,
+      },
+      revalidate: 60 * 60 * 1, // Refresh a cada 1 hora
+    };
+  } catch (error) {
+    console.log("Erro ao buscar os dados:", error);
+    return {
+      props: {
+        props: {
+          categories: [],
+          burguers: [],
+          drinks: [],
+          desserts: [],
+        },
+      },
+    };
+  }
+};

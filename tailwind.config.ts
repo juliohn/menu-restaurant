@@ -1,10 +1,12 @@
 import type { Config } from "tailwindcss";
 
 const config: Config = {
-  content: ["./src/pages/**/*.tsx"],
+  content: ["./src/**/*.tsx"],
   theme: {
     extend: {
       colors: {
+        // primary: "var(--primary-color)",
+        primary: "#4F372F",
         brown500: "#4F372F",
         black: "#121212",
         gray40: "#464646",
