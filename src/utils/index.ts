@@ -1,27 +1,24 @@
-function getLocale() {
-  const userLocale = Intl.DateTimeFormat().resolvedOptions().locale;
-  return userLocale;
-}
+type CurrencyCode = "BRL" | "USD" | "EUR" | "AUD" | "GBP" | "JPY"; // Adicione outros códigos conforme necessário
 
-type Locale = "pt-BR" | "en-US" | "fr-FR" | "en-AU";
-
-const getCurrencyCode = (locale: Locale): string => {
-  const localeCurrencyMap: { [key in Locale]: string } = {
+const getCurrencyCode = (locale: string): CurrencyCode => {
+  const localeCurrencyMap: { [key: string]: CurrencyCode } = {
     "pt-BR": "BRL", // Real brasileiro
     "en-US": "USD", // Dólar americano
     "fr-FR": "EUR", // Euro
     "en-AU": "AUD", // Dólar australiano
+    "en-GB": "GBP", // Libra esterlina
+    "ja-JP": "JPY", // Iene japonês
+    // Adicione outros mapeamentos conforme necessário
   };
 
-  return localeCurrencyMap[locale] || "AUD"; // Default para 'AUD' se a localidade não estiver mapeada
+  return localeCurrencyMap[locale] || "USD"; // Default para 'USD' se a localidade não estiver mapeada
 };
 
-export function formatCurrencyDecimals(number: number) {
-  const locale = getLocale();
+export const formatCurrencyDecimals = (number: number): string => {
+  const userLocale = Intl.DateTimeFormat().resolvedOptions().locale;
+  const currencyCode = getCurrencyCode(userLocale);
 
-  const currencyCode = getCurrencyCode(locale);
-
-  const formatter = new Intl.NumberFormat(locale, {
+  const formatter = new Intl.NumberFormat(userLocale, {
     style: "currency",
     currency: currencyCode,
     minimumFractionDigits: 2,
@@ -29,4 +26,4 @@ export function formatCurrencyDecimals(number: number) {
   });
 
   return formatter.format(number);
-}
+};

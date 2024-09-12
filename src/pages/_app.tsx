@@ -9,7 +9,7 @@ import { Header } from "@/components/header";
 import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
 
-export default function _App({ Component, pageProps }: AppProps) {
+export default function App({ Component, pageProps }: AppProps) {
   return (
     <ReduxProvider store={store}>
       <Nav />

@@ -1,4 +1,4 @@
-import { DrinkItemprops } from "@/pages/product/types";
+import { DrinkItemprops } from "@/types";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/store";
 import { addProduct } from "@/store/basket";

@@ -3,9 +3,12 @@ export interface ModifierProps {
   name: string;
   price: number;
 }
-
-interface ModifiersProductProps {
+export interface ModifiersProductProps {
   items: ModifierProps[];
+}
+
+export interface imageProps {
+  image: string;
 }
 
 export interface ProductProps {
@@ -14,10 +17,11 @@ export interface ProductProps {
   price: number;
   imageUrl: string;
   description?: string;
-  modifiers?: ModifiersProductProps[];
+  modifiers: ModifiersProductProps[];
+  images: imageProps[];
 }
 
-interface Drinkprops {
+export interface DrinkProps {
   id: string;
   name: string;
   description?: string;
@@ -25,5 +29,5 @@ interface Drinkprops {
 }
 
 export interface DrinkItemprops {
-  item: Drinkprops;
+  item: DrinkProps;
 }

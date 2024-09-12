@@ -7,7 +7,7 @@ import { ProductItem } from "@/components/ProductItem";
 import { DrinkItem } from "@/components/DrinkItem";
 import { ResumeBasket } from "@/components/ResumeBasket";
 
-import { ProductProps } from "./product/types";
+import { ProductProps, DrinkProps, imageProps } from "../types";
 
 import { ChevronUp, ReplyAll } from "lucide-react";
 
@@ -15,28 +15,36 @@ import { api } from "@/api/axios";
 
 interface CategoriesProps {
   id: string;
-  title: string;
+  name: string;
   imageUrl: string;
+  images: imageProps[];
 }
 
 interface DrinksProps {
-  id: string;
-  price: string;
-  title: string;
+  sectionId: string;
+  data: DrinkProps[];
+}
+
+interface BurguerProps {
+  sectionId: string;
+  data: ProductProps[];
 }
 
 interface DessertsProps {
-  id: string;
-  price: string;
-  imageUrl: string;
-  title: string;
+  sectionId: string;
+  data: ProductProps[];
 }
 
 interface DataProps {
   categories?: CategoriesProps[];
-  burguers?: ProductProps[];
-  drinks?: DrinksProps[];
-  desserts?: DessertsProps[];
+  burguers?: BurguerProps;
+  drinks?: DrinksProps;
+  desserts?: DessertsProps;
+}
+
+interface BurguerProps {
+  sectionId: string;
+  data: ProductProps[];
 }
 
 export default function Home({
@@ -144,7 +152,7 @@ export const getStaticProps: GetStaticProps<DataProps> = async () => {
     const response = await api.get("challenge/menu");
     const data = response.data;
 
-    const categories = data.sections.map((item) => {
+    const categories = data.sections.map((item: CategoriesProps) => {
       return {
         id: item.id.toString(),
         name: item.name,
@@ -154,7 +162,7 @@ export const getStaticProps: GetStaticProps<DataProps> = async () => {
 
     const burguers = {
       sectionId: data.sections[0].id.toString(),
-      data: data.sections[0].items.map((item) => {
+      data: data.sections[0].items.map((item: ProductProps) => {
         const modifiers =
           item.modifiers === undefined
             ? [
@@ -175,7 +183,7 @@ export const getStaticProps: GetStaticProps<DataProps> = async () => {
 
     const drinks = {
       sectionId: data.sections[1].id.toString(),
-      data: data.sections[1].items.map((item) => {
+      data: data.sections[1].items.map((item: DrinksProps) => {
         return {
           ...item,
         };
@@ -184,7 +192,7 @@ export const getStaticProps: GetStaticProps<DataProps> = async () => {
 
     const desserts = {
       sectionId: data.sections[2].id.toString(),
-      data: data.sections[2].items.map((item) => {
+      data: data.sections[2].items.map((item: ProductProps) => {
         const modifiers = [
           {
             id: item.id,

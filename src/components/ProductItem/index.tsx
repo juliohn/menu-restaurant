@@ -6,7 +6,7 @@ import Image from "next/image";
 import { AppDispatch } from "@/store";
 import { setCurrentItem } from "@/store/currentItem";
 
-import { ProductProps } from "@/pages/product/types";
+import { ProductProps } from "@/types";
 
 import { formatCurrencyDecimals } from "@/utils";
 

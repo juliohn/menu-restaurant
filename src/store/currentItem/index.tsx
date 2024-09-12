@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { ProductProps } from "@/pages/product/types";
+import { ProductProps } from "@/types";
 
 // -  Definição da interface para o estado
 interface ItemState {

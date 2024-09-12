@@ -10,11 +10,11 @@ import { addProduct } from "@/store/basket";
 import { ProductItemOption } from "@/components/ProductItemOption";
 import { Modal } from "@/components/Modal";
 
-import { ModifierProps } from "./types";
+import { ModifierProps } from "@/types";
 import { Dot, Minus, Plus, X } from "lucide-react";
 import { formatCurrencyDecimals } from "@/utils";
 
-export default function ProductPage() {
+export default function Product() {
   const dispatch: AppDispatch = useDispatch();
   const router = useRouter();
 
@@ -32,18 +32,6 @@ export default function ProductPage() {
 
   const [selectedOption, setSelectedOption] = useState<string>(modifierInit.id);
 
-  useEffect(() => {
-    if (currentItem == null) {
-      closeModal();
-    } else {
-      if (router.isReady) {
-        setIsModalOpen(true);
-      }
-    }
-  }, [currentItem]);
-
-  useEffect(() => {}, [currentItem]);
-
   const closeModal = () => {
     setIsModalOpen(false);
     router.push("/");
@@ -53,7 +41,7 @@ export default function ProductPage() {
     const option = modifiers.find((md) => md.id === selectedOption);
 
     const newItem = {
-      name: item!.title,
+      name: item!.name,
       id: option!.id,
       variant: option!.name,
       price: option!.price,
@@ -77,6 +65,12 @@ export default function ProductPage() {
     return formatCurrencyDecimals(quantity * item!.price);
   };
 
+  useEffect(() => {
+    if (router.isReady) {
+      setIsModalOpen(true);
+    }
+  }, [currentItem, router.isReady]);
+
   return (
     <Modal isOpen={isModalOpen} onClose={closeModal}>
       <div className=" w-full h-full flex flex-col">
@@ -99,7 +93,7 @@ export default function ProductPage() {
         </header>
 
         <div className="flex flex-col flex-1 overflow-auto p-4">
-          <h2 className="text-2xl font-bold mb-2">{item!.title}</h2>
+          <h2 className="text-2xl font-bold mb-2">{item!.name}</h2>
           <p className="text-gray-40 font-normal text-base mb-2">
             {item!.description}
           </p>
@@ -110,7 +104,7 @@ export default function ProductPage() {
             <p className=" text-gray-30 font-normal">Select 1 option</p>
           </div>
           <div className="flex flex-col gap-4 mb-4">
-            {modifiers!?.map((option: ModifierProps) => {
+            {modifiers.map((option: ModifierProps) => {
               return (
                 <ProductItemOption
                   key={option.id}
