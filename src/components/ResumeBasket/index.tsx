@@ -3,7 +3,9 @@ import { useSelector, useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "@/store";
 import { addProduct, BasketItem, removeProduct } from "@/store/basket";
 
-import { Minus, Plus, X } from "lucide-react";
+import { Minus, Plus } from "lucide-react";
+
+import { formatCurrencyDecimals } from "@/utils";
 
 export function ResumeBasket() {
   const dispatch: AppDispatch = useDispatch();
@@ -21,12 +23,14 @@ export function ResumeBasket() {
   };
 
   const calculateTotal = () => {
-    return items.reduce((total, item) => total + item.price * item.quantity, 0);
+    return formatCurrencyDecimals(
+      items.reduce((total, item) => total + item.price * item.quantity, 0)
+    );
   };
 
   const calculateSubtotalItem = (id: string) => {
     const item = items.find((st) => st.id === id);
-    return item!.price * item!.quantity;
+    return formatCurrencyDecimals(item!.price * item!.quantity);
   };
 
   return (
@@ -46,7 +50,7 @@ export function ResumeBasket() {
 
             {item.variant && (
               <p className="font-normal text-base text-gray30">
-                {item.variant} ( + R$ {item.price})
+                {item.variant} ({formatCurrencyDecimals(item.price)})
               </p>
             )}
 

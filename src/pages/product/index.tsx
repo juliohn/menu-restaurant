@@ -12,6 +12,7 @@ import { Modal } from "@/components/Modal";
 
 import { ModifierProps } from "./types";
 import { Dot, Minus, Plus, X } from "lucide-react";
+import { formatCurrencyDecimals } from "@/utils";
 
 export default function ProductPage() {
   const dispatch: AppDispatch = useDispatch();
@@ -19,7 +20,7 @@ export default function ProductPage() {
 
   const currentItem = useSelector((state: RootState) => state.currentItem);
   const { item } = currentItem;
-  const modifiers = item?.modifiers[0].items;
+  const modifiers = item!.modifiers[0]!.items;
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [quantity, setQuantity] = useState(1);
@@ -52,10 +53,10 @@ export default function ProductPage() {
     const option = modifiers.find((md) => md.id === selectedOption);
 
     const newItem = {
-      name: item.title,
-      id: option.id,
-      variant: option.name,
-      price: option.price,
+      name: item!.title,
+      id: option!.id,
+      variant: option!.name,
+      price: option!.price,
       quantity,
     };
 
@@ -72,10 +73,9 @@ export default function ProductPage() {
   };
 
   const handleCalculator = () => {
-    const item = modifiers.find((md) => md.id === selectedOption);
-    return quantity * item.price;
+    const item = modifiers!.find((md) => md.id === selectedOption);
+    return formatCurrencyDecimals(quantity * item!.price);
   };
-  quantity * item.price;
 
   return (
     <Modal isOpen={isModalOpen} onClose={closeModal}>
@@ -83,7 +83,7 @@ export default function ProductPage() {
         <header className="w-full h-64">
           <Image
             className="h-full w-full object-cover"
-            src={item.imageUrl}
+            src={item!.imageUrl}
             alt=""
             width={390}
             height={265}

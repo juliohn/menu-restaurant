@@ -1,7 +1,7 @@
 export interface ModifierProps {
   id: string;
   name: string;
-  price: string;
+  price: number;
 }
 
 interface ModifiersProductProps {
@@ -11,7 +11,7 @@ interface ModifiersProductProps {
 export interface ProductProps {
   id: string;
   name: string;
-  price: string;
+  price: number;
   imageUrl: string;
   description?: string;
   modifiers?: ModifiersProductProps[];

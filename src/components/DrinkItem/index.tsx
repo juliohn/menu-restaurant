@@ -3,6 +3,8 @@ import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/store";
 import { addProduct } from "@/store/basket";
 
+import { formatCurrencyDecimals } from "@/utils";
+
 export function DrinkItem({ item }: DrinkItemprops) {
   const dispatch: AppDispatch = useDispatch();
 
@@ -25,7 +27,9 @@ export function DrinkItem({ item }: DrinkItemprops) {
           </div>
         )}
 
-        <div className=" text-base font-medium text-black">R$ {item.price}</div>
+        <div className=" text-base font-medium text-black">
+          {formatCurrencyDecimals(item.price)}
+        </div>
       </div>
 
       <div className="w-2/5 flex rounded-xl items-center justify-end">

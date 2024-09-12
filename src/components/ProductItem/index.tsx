@@ -8,6 +8,8 @@ import { setCurrentItem } from "@/store/currentItem";
 
 import { ProductProps } from "@/pages/product/types";
 
+import { formatCurrencyDecimals } from "@/utils";
+
 interface ItemProps {
   item: ProductProps;
 }
@@ -34,7 +36,9 @@ export function ProductItem({ item }: ItemProps) {
           {item.description}
         </div>
 
-        <div className=" text-base font-medium text-black">R$ {item.price}</div>
+        <div className=" text-base font-medium text-black">
+          {formatCurrencyDecimals(item.price)}
+        </div>
       </div>
 
       <div className="w-2/5 border border-gray-200 rounded-lg">
