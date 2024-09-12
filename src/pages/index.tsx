@@ -47,32 +47,37 @@ export default function Home({
 }: DataProps) {
   const [isActiveCategory, setIsActiveCategory] = useState("");
 
+  console.log(categories);
+
   return (
     <div className="">
       <InputSearch />
 
       <div className="flex gap-6 mt-2">
         <div className="md:w-3/5  md:px-4 bg-white">
-          <div className="flex mt-4 w-full item-center gap-4">
+          <div className="flex mt-4 w-full item-center gap-4 ">
             {categories!.map((category) => {
               return (
                 <Category
                   key={category.id}
                   id={category.id}
                   imageUrl={category.imageUrl}
-                  title={category.title}
+                  name={category.name}
                   isActive={isActiveCategory === category.id}
                   onClick={() => setIsActiveCategory(category.id.toString())}
                 />
               );
             })}
-            {isActiveCategory !== "" && (
+          </div>
+
+          {isActiveCategory !== "" && (
+            <div className="flex w-full justify-center items-center ">
               <a onClick={() => setIsActiveCategory("")}>
                 <ReplyAll />
-                {typeof isActiveCategory}
+                <span>Reset</span>
               </a>
-            )}
-          </div>
+            </div>
+          )}
 
           {(isActiveCategory === burguers!.sectionId ||
             isActiveCategory === "") && (
@@ -141,7 +146,8 @@ export const getStaticProps: GetStaticProps<DataProps> = async () => {
 
     const categories = data.sections.map((item) => {
       return {
-        ...item,
+        id: item.id.toString(),
+        name: item.name,
         imageUrl: item.images[0].image,
       };
     });

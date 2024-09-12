@@ -28,7 +28,7 @@ export function DrinkItem({ item }: DrinkItemprops) {
         <div className=" text-base font-medium text-black">R$ {item.price}</div>
       </div>
 
-      <div className="w-2/5 flex rounded-xl items-center justify-center">
+      <div className="w-2/5 flex rounded-xl items-center justify-end">
         <button
           onClick={handleAddItem}
           className=" bg-brown500 px-4 py-1 text-white font-medium text-base rounded-md"
