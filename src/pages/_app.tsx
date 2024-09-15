@@ -6,8 +6,8 @@ import type { AppProps } from "next/app";
 import { store } from "@/store";
 
 import { Header } from "@/components/header";
-import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
+import { Nav } from "@/components/Nav";
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
