@@ -1,13 +1,16 @@
+// next.config.mjs
+import path from "path";
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  webpack(config) {
+    config.resolve.alias["@"] = path.resolve(process.cwd(), "src");
+    return config;
+  },
   images: {
     domains: ["preodemo.gumlet.io"],
   },
   reactStrictMode: true,
-  webpack(config) {
-    config.resolve.alias["@"] = path.resolve(__dirname, "src");
-    return config;
-  },
 };
 
 export default nextConfig;
