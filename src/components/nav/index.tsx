@@ -4,7 +4,7 @@ import { Menu } from "lucide-react";
 
 export function Nav() {
   return (
-    <nav
+    <div
       className={
         " w-full mx-auto flex items-center  py-2 h-16 bg-primary fixed top-0"
       }
@@ -26,6 +26,6 @@ export function Nav() {
           </div>
         </div>
       </div>
-    </nav>
+    </div>
   );
 }
