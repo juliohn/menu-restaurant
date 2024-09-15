@@ -17,7 +17,7 @@ export const currentItem = createSlice({
   initialState,
   reducers: {
     // - Ação para definir o item
-    setCurrentItem: (state, action: PayloadAction<ProductProps | null>) => {
+    setCurrentItem: (state, action: PayloadAction<ProductProps>) => {
       state.item = action.payload;
     },
     // - Ação para limpar a cesta

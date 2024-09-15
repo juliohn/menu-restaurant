@@ -1,10 +1,6 @@
-import { useDispatch } from "react-redux";
-
 import { useRouter } from "next/router";
-import Image from "next/image";
 
-import { AppDispatch } from "@/store";
-import { setCurrentItem } from "@/store/currentItem";
+import Image from "next/image";
 
 import { ProductProps } from "@/types";
 
@@ -15,16 +11,11 @@ interface ItemProps {
 }
 
 export function ProductItem({ item }: ItemProps) {
-  const dispatch: AppDispatch = useDispatch();
-
   const router = useRouter();
 
   const openProductModal = () => {
-    // - setCurrentItem pelo redux
-    dispatch(setCurrentItem(item));
-
     // - navega para rota de detalhe do produto
-    router.push(`/product`);
+    router.push(`/product/${item.id}`);
   };
 
   return (

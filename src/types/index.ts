@@ -31,3 +31,8 @@ export interface DrinkProps {
 export interface DrinkItemprops {
   item: DrinkProps;
 }
+
+export interface ProductsFormatedProps {
+  sectionId: string;
+  data: ProductProps[];
+}

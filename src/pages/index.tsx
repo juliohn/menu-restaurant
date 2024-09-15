@@ -7,7 +7,12 @@ import { ProductItem } from "@/components/ProductItem";
 import { DrinkItem } from "@/components/DrinkItem";
 import { ResumeBasket } from "@/components/ResumeBasket";
 
-import { ProductProps, DrinkProps, imageProps } from "../types";
+import {
+  ProductProps,
+  ProductsFormatedProps,
+  DrinkProps,
+  imageProps,
+} from "../types";
 
 import { ChevronUp, ReplyAll } from "lucide-react";
 
@@ -25,26 +30,11 @@ interface DrinksProps {
   data: DrinkProps[];
 }
 
-interface BurguerProps {
-  sectionId: string;
-  data: ProductProps[];
-}
-
-interface DessertsProps {
-  sectionId: string;
-  data: ProductProps[];
-}
-
 interface DataProps {
   categories?: CategoriesProps[];
-  burguers?: BurguerProps;
+  burguers?: ProductsFormatedProps;
   drinks?: DrinksProps;
-  desserts?: DessertsProps;
-}
-
-interface BurguerProps {
-  sectionId: string;
-  data: ProductProps[];
+  desserts?: ProductsFormatedProps;
 }
 
 export default function Home({
@@ -54,8 +44,6 @@ export default function Home({
   desserts,
 }: DataProps) {
   const [isActiveCategory, setIsActiveCategory] = useState("");
-
-  console.log(categories);
 
   return (
     <div className="">
@@ -218,7 +206,7 @@ export const getStaticProps: GetStaticProps<DataProps> = async () => {
       revalidate: 60 * 60 * 1, // Refresh a cada 1 hora
     };
   } catch (error) {
-    console.log("Erro ao buscar os dados:", error);
+    // console.log("Erro ao buscar os dados:", error);
     return {
       props: {
         props: {
