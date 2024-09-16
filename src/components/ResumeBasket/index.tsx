@@ -1,9 +1,14 @@
 import { useSelector, useDispatch } from "react-redux";
 
 import { RootState, AppDispatch } from "@/store";
-import { addProduct, BasketItem, removeProduct } from "@/store/basket";
+import {
+  addProduct,
+  BasketItem,
+  removeProduct,
+  deleteProduct,
+} from "@/store/basket";
 
-import { Minus, Plus } from "lucide-react";
+import { Minus, Plus, Trash } from "lucide-react";
 
 import { formatCurrencyDecimals } from "@/utils";
 
@@ -20,6 +25,10 @@ export function ResumeBasket() {
 
   const handleRemoveItem = (item: BasketItem) => {
     dispatch(removeProduct(item));
+  };
+
+  const handleDeleteProduct = (id: number) => {
+    dispatch(deleteProduct(id.toString()));
   };
 
   const calculateTotal = () => {
@@ -54,22 +63,28 @@ export function ResumeBasket() {
               </p>
             )}
 
-            <div className="flex  items-center mt-4 mb-8">
-              <button
-                disabled={item.quantity < 2}
-                onClick={() => handleRemoveItem(item)}
-                className="bg-brown500 justify-center items-center p-1 rounded-full size-6"
-              >
-                <Minus className="size-4 text-white" />
-              </button>
-              <span className="w-4 mx-6 text-center text-md font-semibold">
-                {item.quantity}
-              </span>
-              <button
-                onClick={() => handleAddItem({ ...item, quantity: 1 })}
-                className="bg-brown500 justify-center items-center p-1 rounded-full size-6"
-              >
-                <Plus className="text-white size-4" />
+            <div className="flex justify-between items-center mt-4 mb-8">
+              <div>
+                <button
+                  disabled={item.quantity < 2}
+                  onClick={() => handleRemoveItem(item)}
+                  className="bg-brown500 justify-center items-center p-1 rounded-full size-6"
+                >
+                  <Minus className="size-4 text-white" />
+                </button>
+                <span className="w-4 mx-6 text-center text-md font-semibold">
+                  {item.quantity}
+                </span>
+                <button
+                  onClick={() => handleAddItem({ ...item, quantity: 1 })}
+                  className="bg-brown500 justify-center items-center p-1 rounded-full size-6"
+                >
+                  <Plus className="text-white size-4" />
+                </button>
+              </div>
+
+              <button onClick={() => handleDeleteProduct(item.id)}>
+                <Trash className="text-red-600" />
               </button>
             </div>
           </div>

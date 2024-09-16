@@ -1,12 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit";
 
 import { basketSlice } from "./basket";
-import { currentItem } from "./currentItem";
 
 export const store = configureStore({
   reducer: {
     basket: basketSlice.reducer,
-    currentItem: currentItem.reducer,
   },
 });
 

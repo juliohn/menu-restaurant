@@ -77,7 +77,7 @@ export default function Home({ categories, productsList }: DataProps) {
             })}
           </div>
 
-          {isActiveCategory !== "" && (
+          {isActiveCategory !== "all" && (
             <div className="flex w-full justify-center items-center ">
               <a
                 onClick={() => {
