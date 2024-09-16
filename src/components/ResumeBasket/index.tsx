@@ -27,7 +27,7 @@ export function ResumeBasket() {
     dispatch(removeProduct(item));
   };
 
-  const handleDeleteProduct = (id: number) => {
+  const handleDeleteProduct = (id: string) => {
     dispatch(deleteProduct(id.toString()));
   };
 
