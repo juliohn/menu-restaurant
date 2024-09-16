@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, ChangeEvent } from "react";
 import { GetStaticProps } from "next";
 
 import { Category } from "@/components/Category";
@@ -7,16 +7,17 @@ import { ProductItem } from "@/components/ProductItem";
 import { DrinkItem } from "@/components/DrinkItem";
 import { ResumeBasket } from "@/components/ResumeBasket";
 
-import {
-  ProductProps,
-  ProductsFormatedProps,
-  DrinkProps,
-  imageProps,
-} from "../types";
+import { ProductProps, DrinkProps, imageProps } from "../types";
 
 import { ChevronUp, ReplyAll } from "lucide-react";
 
 import { api } from "@/api/axios";
+
+interface Section {
+  id: number;
+  name: string;
+  items: ProductProps[];
+}
 
 interface CategoriesProps {
   id: string;
@@ -25,29 +26,37 @@ interface CategoriesProps {
   images: imageProps[];
 }
 
-interface DrinksProps {
-  sectionId: string;
-  data: DrinkProps[];
+interface DataFormatedProps {
+  [key: string]: ProductProps[];
 }
 
 interface DataProps {
   categories?: CategoriesProps[];
-  burguers?: ProductsFormatedProps;
-  drinks?: DrinksProps;
-  desserts?: ProductsFormatedProps;
+  productsList?: DataFormatedProps | undefined;
 }
 
-export default function Home({
-  categories,
-  burguers,
-  drinks,
-  desserts,
-}: DataProps) {
-  const [isActiveCategory, setIsActiveCategory] = useState("");
+export default function Home({ categories, productsList }: DataProps) {
+  const [isActiveCategory, setIsActiveCategory] = useState("all");
+
+  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [filteredItems, setFilteredItems] = useState<ProductProps[]>([]);
+
+  // - Pesquisa um item
+  const handleSearch = (event: ChangeEvent<HTMLInputElement>): void => {
+    const term = event.target.value.toLowerCase();
+    setSearchTerm(term);
+
+    const results = Object.values(productsList!).flatMap((product) =>
+      product.filter((item) => item.name.toLowerCase().includes(term))
+    );
+
+    setIsActiveCategory(results[0].section);
+    setFilteredItems(results);
+  };
 
   return (
     <div className="">
-      <InputSearch />
+      <InputSearch value={searchTerm} onChange={handleSearch} />
 
       <div className="flex gap-6 mt-2">
         <div className="md:w-3/5  md:px-4 bg-white">
@@ -60,7 +69,9 @@ export default function Home({
                   imageUrl={category.imageUrl}
                   name={category.name}
                   isActive={isActiveCategory === category.id}
-                  onClick={() => setIsActiveCategory(category.id.toString())}
+                  onClick={() =>
+                    setIsActiveCategory(category.name.toLocaleLowerCase())
+                  }
                 />
               );
             })}
@@ -68,15 +79,21 @@ export default function Home({
 
           {isActiveCategory !== "" && (
             <div className="flex w-full justify-center items-center ">
-              <a onClick={() => setIsActiveCategory("")}>
+              <a
+                onClick={() => {
+                  setIsActiveCategory("all");
+                  setFilteredItems([]);
+                  setSearchTerm("");
+                }}
+              >
                 <ReplyAll />
                 <span>Reset</span>
               </a>
             </div>
           )}
 
-          {(isActiveCategory === burguers!.sectionId ||
-            isActiveCategory === "") && (
+          {/* burgers */}
+          {(isActiveCategory === "burgers" || isActiveCategory === "all") && (
             <>
               <div className="flex justify-between items-center ">
                 <h1 className="text-black font-medium text-2xl">Burguers</h1>
@@ -84,15 +101,19 @@ export default function Home({
               </div>
 
               <div className="h-auto flex flex-col  gap-8  mt-8">
-                {burguers!.data.map((burguer: ProductProps) => {
-                  return <ProductItem key={burguer.id} item={burguer} />;
-                })}
+                {filteredItems.length > 0
+                  ? filteredItems!.map((burguer: ProductProps) => {
+                      return <ProductItem key={burguer.id} item={burguer} />;
+                    })
+                  : productsList!.burgers.map((burguer: ProductProps) => {
+                      return <ProductItem key={burguer.id} item={burguer} />;
+                    })}
               </div>
             </>
           )}
 
-          {(isActiveCategory === drinks!.sectionId ||
-            isActiveCategory === "") && (
+          {/* Drinks */}
+          {(isActiveCategory === "drinks" || isActiveCategory === "all") && (
             <>
               <div className="flex justify-between items-center mt-8">
                 <h1 className="text-black font-medium text-2xl">Drinks</h1>
@@ -100,15 +121,19 @@ export default function Home({
               </div>
 
               <div className="h-auto flex flex-col  gap-8  mt-8">
-                {drinks!.data.map((drink) => {
-                  return <DrinkItem key={drink.id} item={drink} />;
-                })}
+                {filteredItems.length > 0
+                  ? filteredItems!.map((drink: DrinkProps) => {
+                      return <DrinkItem key={drink.id} item={drink} />;
+                    })
+                  : productsList!.drinks.map((drink: DrinkProps) => {
+                      return <DrinkItem key={drink.id} item={drink} />;
+                    })}
               </div>
             </>
           )}
 
-          {(isActiveCategory === desserts!.sectionId ||
-            isActiveCategory === "") && (
+          {/* Desserts */}
+          {(isActiveCategory === "desserts" || isActiveCategory === "all") && (
             <>
               <div className="flex justify-between items-center mt-8">
                 <h1 className="text-black font-medium text-2xl">Desserts</h1>
@@ -116,9 +141,14 @@ export default function Home({
               </div>
 
               <div className="h-auto flex flex-col  gap-8  mt-8 md:mb-8">
-                {desserts!.data!.map((dessert: ProductProps) => {
-                  return <ProductItem key={dessert.id} item={dessert} />;
-                })}
+                dessert
+                {filteredItems.length > 0
+                  ? filteredItems!.map((dessert: ProductProps) => {
+                      return <ProductItem key={dessert.id} item={dessert} />;
+                    })
+                  : productsList!.desserts.map((dessert: ProductProps) => {
+                      return <ProductItem key={dessert.id} item={dessert} />;
+                    })}
               </div>
             </>
           )}
@@ -140,6 +170,47 @@ export const getStaticProps: GetStaticProps<DataProps> = async () => {
     const response = await api.get("challenge/menu");
     const data = response.data;
 
+    const productsList = data.sections.reduce(
+      (
+        acc: {
+          [key: string]: ProductProps[];
+        },
+        section: Section
+      ) => {
+        acc[section.name.toLowerCase()] = section.items.map((item) => {
+          const modifiers = [
+            {
+              id: item.id,
+              name: item.name,
+              minChoices: 1,
+              maxChoices: 1,
+              items: [
+                {
+                  id: item.id,
+                  name: item.name,
+                  price: item.price || 0.0,
+                  maxChoices: 1,
+                  visible: 1,
+                  available: item.price !== undefined,
+                },
+              ],
+            },
+          ];
+
+          return {
+            ...item,
+            imageUrl: item.images?.[0]?.image || "",
+            modifiers,
+            section: section.name.toLowerCase(),
+          };
+        });
+
+        return acc;
+      },
+
+      {}
+    );
+
     const categories = data.sections.map((item: CategoriesProps) => {
       return {
         id: item.id.toString(),
@@ -148,60 +219,10 @@ export const getStaticProps: GetStaticProps<DataProps> = async () => {
       };
     });
 
-    const burguers = {
-      sectionId: data.sections[0].id.toString(),
-      data: data.sections[0].items.map((item: ProductProps) => {
-        const modifiers =
-          item.modifiers === undefined
-            ? [
-                {
-                  id: item.id,
-                  items: [{ ...item }],
-                },
-              ]
-            : item.modifiers;
-
-        return {
-          ...item,
-          imageUrl: item.images[0].image,
-          modifiers,
-        };
-      }),
-    };
-
-    const drinks = {
-      sectionId: data.sections[1].id.toString(),
-      data: data.sections[1].items.map((item: DrinksProps) => {
-        return {
-          ...item,
-        };
-      }),
-    };
-
-    const desserts = {
-      sectionId: data.sections[2].id.toString(),
-      data: data.sections[2].items.map((item: ProductProps) => {
-        const modifiers = [
-          {
-            id: item.id,
-            items: [{ ...item }],
-          },
-        ];
-
-        return {
-          ...item,
-          imageUrl: item.images[0].image,
-          modifiers,
-        };
-      }),
-    };
-
     return {
       props: {
         categories,
-        burguers,
-        drinks,
-        desserts,
+        productsList,
       },
       revalidate: 60 * 60 * 1, // Refresh a cada 1 hora
     };
@@ -211,9 +232,7 @@ export const getStaticProps: GetStaticProps<DataProps> = async () => {
       props: {
         props: {
           categories: [],
-          burguers: [],
-          drinks: [],
-          desserts: [],
+          productsList: [],
         },
       },
     };
