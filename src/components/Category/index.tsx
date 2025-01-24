@@ -17,7 +17,7 @@ export function Category({
 }: categoryProps) {
   return (
     <div
-      className="flex-col justify-between  w-28 h-44  mb-6"
+      className="flex-col justify-between  w-full h-44 mt-5"
       onClick={() => onClick(id)}
     >
       {/* Div da imagem */}
@@ -41,11 +41,11 @@ export function Category({
           className="
             flex
             mt-6
-            w-full
+            px-4
+            mx-4
             item-center
-            gap-2
             rounded-lg
-            
+            justify-center
             border-2
             border-black"
         />

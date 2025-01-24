@@ -43,14 +43,14 @@ export function ResumeBasket() {
   };
 
   return (
-    <div className="w-full bg-white flex flex-col md:p-4">
+    <div className="w-full flex flex-col bg-blue10 ">
       {items.map((item) => {
         return (
           <div
             key={item.id}
-            className="flex-grow flex flex-col border-b border-gray5"
+            className="flex-grow flex flex-col md:p-4   bg-white border-b border-gray5"
           >
-            <div className="flex items-center justify-between mt-2">
+            <div className="flex items-center  justify-between mt-2">
               <h2 className="text-base font-normal">{item.name}</h2>
               <span className="text-base font-medium text-black">
                 {calculateSubtotalItem(item.id)}
@@ -63,7 +63,7 @@ export function ResumeBasket() {
               </p>
             )}
 
-            <div className="flex justify-between items-center mt-4 mb-8">
+            <div className="flex justify-between  items-center mt-4 mb-8">
               <div>
                 <button
                   disabled={item.quantity < 2}
@@ -91,7 +91,7 @@ export function ResumeBasket() {
         );
       })}
 
-      <div>
+      <div className="md:p-4">
         <div className="flex justify-between mt-2 py-2">
           <span className="text-gray-600">Subtotal</span>
           <span className="font-semibold">R$ {calculateTotal()}</span>

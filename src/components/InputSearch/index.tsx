@@ -8,7 +8,7 @@ interface InputProps {
 
 export function InputSearch({ value, onChange }: InputProps) {
   return (
-    <div className="flex mt-4 w-full item-center gap-2 rounded-lg border border-gray200  px-3 py-2 shadow-sm">
+    <div className="flex mt-4 w-full item-center gap-2 bg-white rounded-lg border border-gray200  px-3 py-2 shadow-sm">
       <Search className="h-5 w-5 text-gray-1200" />
       <input
         value={value}

@@ -23,22 +23,23 @@ export function ProductItem({ item }: ItemProps) {
       <div className="w-4/5 rounded-lg flex flex-col">
         <h2 className="text-black font-medium text-base">{item.name}</h2>
 
-        <div className="truncate-2-lines text-base text-gray400 font-light">
-          {item.description}
-        </div>
+        {item.description && (
+          <div className="truncate-2-lines text-base text-gray400 font-light">
+            {item.description}
+          </div>
+        )}
 
         <div className=" text-base font-medium text-black">
           {formatCurrencyDecimals(item.price)}
         </div>
       </div>
 
-      <div className="w-2/5 border border-gray-200 rounded-lg">
+      <div className="relative min-w-36 min-h-[85px]">
         <Image
-          className="h-full w-full object-cover rounded-md"
           src={item.imageUrl}
-          alt=""
-          width={128}
-          height={85}
+          alt={item.name}
+          fill
+          className="object-cover rounded-lg"
         />
       </div>
     </div>

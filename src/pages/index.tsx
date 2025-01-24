@@ -1,4 +1,4 @@
-import { useState, ChangeEvent } from "react";
+import { useState, ChangeEvent, useEffect } from "react";
 import { GetStaticProps } from "next";
 
 import { Category } from "@/components/Category";
@@ -6,10 +6,12 @@ import { InputSearch } from "@/components/InputSearch";
 import { ProductItem } from "@/components/ProductItem";
 import { DrinkItem } from "@/components/DrinkItem";
 import { ResumeBasket } from "@/components/ResumeBasket";
+import { MenuSection } from "@/components/MenuSection";
+import { Loading } from "@/components/Loading";
 
 import { ProductProps, DrinkProps, imageProps } from "../types";
 
-import { ChevronUp, ReplyAll } from "lucide-react";
+import { ReplyAll } from "lucide-react";
 
 import { api } from "@/api/axios";
 
@@ -35,11 +37,56 @@ interface DataProps {
   productsList?: DataFormatedProps | undefined;
 }
 
-export default function Home({ categories, productsList }: DataProps) {
-  const [isActiveCategory, setIsActiveCategory] = useState("all");
+// Adicione essa configuração no início do componente Home
+const SECTIONS_CONFIG = {
+  burgers: {
+    id: "burgers",
+    title: "Burguers",
+    component: ProductItem,
+  },
+  drinks: {
+    id: "drinks",
+    title: "Drinks",
+    component: DrinkItem,
+  },
+  desserts: {
+    id: "desserts",
+    title: "Desserts",
+    component: ProductItem,
+  },
+} as const;
 
+// Add this type definition near the top of the file, after other interfaces
+type SectionId = keyof typeof SECTIONS_CONFIG;
+
+export default function Home({ categories, productsList }: DataProps) {
+  const [isLoading, setIsLoading] = useState(true);
+  const [isActiveCategory, setIsActiveCategory] = useState("all");
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [filteredItems, setFilteredItems] = useState<ProductProps[]>([]);
+  const [expandedSections, setExpandedSections] = useState({
+    burgers: true,
+    drinks: true,
+    desserts: true,
+  });
+
+  useEffect(() => {
+    if (categories && productsList) {
+      setIsLoading(false);
+    }
+  }, [categories, productsList]);
+
+  if (isLoading) {
+    return <Loading />;
+  }
+
+  // Update the toggle function
+  const toggleSection = (section: SectionId) => {
+    setExpandedSections((prev) => ({
+      ...prev,
+      [section]: !prev[section],
+    }));
+  };
 
   // - Pesquisa um item
   const handleSearch = (event: ChangeEvent<HTMLInputElement>): void => {
@@ -47,118 +94,90 @@ export default function Home({ categories, productsList }: DataProps) {
     setSearchTerm(term);
 
     const results = Object.values(productsList!).flatMap((product) =>
-      product.filter((item) => item.name.toLowerCase().includes(term))
+      product.filter((item) => {
+        const nameMatch = item.name.toLowerCase().includes(term);
+        const categoryMatch = item.section.toLowerCase().includes(term);
+        const priceMatch = item.price?.toString().includes(term);
+
+        return nameMatch || categoryMatch || priceMatch;
+      })
     );
 
-    setIsActiveCategory(results[0].section);
+    if (results.length > 0) {
+      setIsActiveCategory(results[0].section);
+    }
     setFilteredItems(results);
   };
 
   return (
-    <div className="">
-      <InputSearch value={searchTerm} onChange={handleSearch} />
+    <div className="flex flex-col">
+      <div className="">
+        <InputSearch value={searchTerm} onChange={handleSearch} />
+      </div>
 
-      <div className="flex gap-6 mt-2">
-        <div className="md:w-3/5  md:px-4 bg-white">
-          <div className="flex mt-4 w-full item-center gap-4 ">
-            {categories!.map((category) => {
+      <div className="flex mt-8">
+        <div className="w-full md:w-3/5 bg-white md:shadow-2xl">
+          <div className="flex w-full items-center">
+            {categories!.map((category) => (
+              <Category
+                key={category.id}
+                id={category.id}
+                imageUrl={category.imageUrl}
+                name={category.name}
+                isActive={
+                  isActiveCategory === category.name.toLocaleLowerCase()
+                }
+                onClick={() =>
+                  setIsActiveCategory(category.name.toLocaleLowerCase())
+                }
+              />
+            ))}
+          </div>
+
+          <div className="mt-4">
+            {isActiveCategory !== "all" && (
+              <div className="flex w-full justify-center items-center gap-2 py-4 cursor-pointer">
+                <a
+                  className="flex items-center gap-2 text-primary hover:text-primary/80 transition-colors"
+                  onClick={() => {
+                    setIsActiveCategory("all");
+                    setFilteredItems([]);
+                    setSearchTerm("");
+                  }}
+                >
+                  <ReplyAll size={20} />
+                  <span>Reset filters</span>
+                </a>
+              </div>
+            )}
+
+            {Object.entries(SECTIONS_CONFIG).map(([sectionId, config]) => {
+              if (isActiveCategory !== "all" && isActiveCategory !== sectionId)
+                return null;
+
               return (
-                <Category
-                  key={category.id}
-                  id={category.id}
-                  imageUrl={category.imageUrl}
-                  name={category.name}
-                  isActive={isActiveCategory === category.id}
-                  onClick={() =>
-                    setIsActiveCategory(category.name.toLocaleLowerCase())
-                  }
+                <MenuSection
+                  key={sectionId}
+                  sectionId={sectionId as SectionId}
+                  title={config.title}
+                  isExpanded={expandedSections[sectionId as SectionId]}
+                  onToggle={() => toggleSection(sectionId as SectionId)}
+                  items={productsList![sectionId as SectionId]}
+                  ItemComponent={config.component}
+                  filteredItems={filteredItems}
                 />
               );
             })}
           </div>
-
-          {isActiveCategory !== "all" && (
-            <div className="flex w-full justify-center items-center ">
-              <a
-                onClick={() => {
-                  setIsActiveCategory("all");
-                  setFilteredItems([]);
-                  setSearchTerm("");
-                }}
-              >
-                <ReplyAll />
-                <span>Reset</span>
-              </a>
-            </div>
-          )}
-
-          {/* burgers */}
-          {(isActiveCategory === "burgers" || isActiveCategory === "all") && (
-            <>
-              <div className="flex justify-between items-center ">
-                <h1 className="text-black font-medium text-2xl">Burguers</h1>
-                <ChevronUp className="text-black" />
-              </div>
-
-              <div className="h-auto flex flex-col  gap-8  mt-8">
-                {filteredItems.length > 0
-                  ? filteredItems!.map((burguer: ProductProps) => {
-                      return <ProductItem key={burguer.id} item={burguer} />;
-                    })
-                  : productsList!.burgers.map((burguer: ProductProps) => {
-                      return <ProductItem key={burguer.id} item={burguer} />;
-                    })}
-              </div>
-            </>
-          )}
-
-          {/* Drinks */}
-          {(isActiveCategory === "drinks" || isActiveCategory === "all") && (
-            <>
-              <div className="flex justify-between items-center mt-8">
-                <h1 className="text-black font-medium text-2xl">Drinks</h1>
-                <ChevronUp className="text-black" />
-              </div>
-
-              <div className="h-auto flex flex-col  gap-8  mt-8">
-                {filteredItems.length > 0
-                  ? filteredItems!.map((drink: DrinkProps) => {
-                      return <DrinkItem key={drink.id} item={drink} />;
-                    })
-                  : productsList!.drinks.map((drink: DrinkProps) => {
-                      return <DrinkItem key={drink.id} item={drink} />;
-                    })}
-              </div>
-            </>
-          )}
-
-          {/* Desserts */}
-          {(isActiveCategory === "desserts" || isActiveCategory === "all") && (
-            <>
-              <div className="flex justify-between items-center mt-8">
-                <h1 className="text-black font-medium text-2xl">Desserts</h1>
-                <ChevronUp className="text-black" />
-              </div>
-
-              <div className="h-auto flex flex-col  gap-8  mt-8 md:mb-8">
-                dessert
-                {filteredItems.length > 0
-                  ? filteredItems!.map((dessert: ProductProps) => {
-                      return <ProductItem key={dessert.id} item={dessert} />;
-                    })
-                  : productsList!.desserts.map((dessert: ProductProps) => {
-                      return <ProductItem key={dessert.id} item={dessert} />;
-                    })}
-              </div>
-            </>
-          )}
         </div>
 
-        <div className="w-2/5 bg-blue10 hidden md:flex flex-col">
-          <div className="mb-4 px-4">
-            <h2 className="text-gray40 text-2xl  font-medium"> Carrinho</h2>
+        <div className="hidden md:block md:w-2/5 bg-blue10 shadow-2xl h-full md:ml-6">
+          <div className="mb-4 px-4 pt-4">
+            <h2 className="text-gray40 text-2xl font-medium">Carrinho</h2>
           </div>
-          <ResumeBasket />
+          <div className="flex-1 overflow-y-auto">
+            <ResumeBasket />
+          </div>
         </div>
       </div>
     </div>
