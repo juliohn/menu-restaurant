@@ -59,7 +59,47 @@ const SECTIONS_CONFIG = {
 // Add this type definition near the top of the file, after other interfaces
 type SectionId = keyof typeof SECTIONS_CONFIG;
 
-export default function Home({ categories, productsList }: DataProps) {
+import { useAppSelector, useAppDispatch } from "../hooks";
+import { setWhiteLabelConfig } from "@/store/whitelabel";
+
+interface WhiteLabelProps extends DataProps {
+  whiteLabelConfig: {
+    id: number;
+    name: string;
+    internalName: string;
+    description: string | null;
+    liveFlag: number;
+    demoFlag: number;
+    address1: string;
+    address2: string;
+    address3: string | null;
+    city: string;
+    county: string;
+    postcode: string;
+    country: string;
+    timezoneOffset: string;
+    locale: string;
+    timeZone: string;
+    webSettings: {
+      id: number;
+      venueId: number;
+      bannerImage: string;
+      backgroundColour: string;
+      primaryColour: string;
+      primaryColourHover: string;
+      navBackgroundColour: string;
+    };
+    ccy: string;
+    ccySymbol: string;
+    currency: string;
+  };
+}
+
+export default function Home({
+  categories,
+  productsList,
+  whiteLabelConfig,
+}: WhiteLabelProps) {
   const [isLoading, setIsLoading] = useState(true);
   const [isActiveCategory, setIsActiveCategory] = useState("all");
   const [searchTerm, setSearchTerm] = useState<string>("");
@@ -70,11 +110,29 @@ export default function Home({ categories, productsList }: DataProps) {
     desserts: true,
   });
 
+  const dispatch = useAppDispatch();
+
   useEffect(() => {
     if (categories && productsList) {
       setIsLoading(false);
     }
-  }, [categories, productsList]);
+    console.log("===", whiteLabelConfig);
+  }, [categories, productsList, whiteLabelConfig]);
+
+  useEffect(() => {
+    // Configura as variáveis CSS customizadas
+    document.documentElement.style.setProperty(
+      "--primary-color",
+      whiteLabelConfig.webSettings.primaryColour
+    );
+    document.documentElement.style.setProperty(
+      "--header-color",
+      whiteLabelConfig.webSettings.navBackgroundColour
+    );
+
+    // Atualiza o estado do Redux
+    dispatch(setWhiteLabelConfig(whiteLabelConfig.webSettings));
+  }, [dispatch, whiteLabelConfig]);
 
   if (isLoading) {
     return <Loading />;
@@ -111,12 +169,12 @@ export default function Home({ categories, productsList }: DataProps) {
 
   return (
     <div className="flex flex-col">
-      <div className="">
+      <div className="w-full">
         <InputSearch value={searchTerm} onChange={handleSearch} />
       </div>
 
       <div className="flex mt-8">
-        <div className="w-full md:w-3/5 bg-white md:shadow-2xl">
+        <div className="w-full md:w-3/5 bg-brand-primary shadow-2xl">
           <div className="flex w-full items-center">
             {categories!.map((category) => (
               <Category
@@ -184,12 +242,19 @@ export default function Home({ categories, productsList }: DataProps) {
   );
 }
 
-export const getStaticProps: GetStaticProps<DataProps> = async () => {
+export const getStaticProps: GetStaticProps<WhiteLabelProps> = async () => {
   try {
-    const response = await api.get("challenge/menu");
-    const data = response.data;
+    // Fetch both menu and whitelabel data in parallel
+    const [menuResponse, whitelabelResponse] = await Promise.all([
+      api.get("challenge/menu"),
+      api.get("challenge/venue/9"),
+    ]);
 
-    const productsList = data.sections.reduce(
+    const menuData = menuResponse.data;
+
+    const whiteLabelConfig = whitelabelResponse.data;
+
+    const productsList = menuData.sections.reduce(
       (
         acc: {
           [key: string]: ProductProps[];
@@ -230,7 +295,7 @@ export const getStaticProps: GetStaticProps<DataProps> = async () => {
       {}
     );
 
-    const categories = data.sections.map((item: CategoriesProps) => {
+    const categories = menuData.sections.map((item: CategoriesProps) => {
       return {
         id: item.id.toString(),
         name: item.name,
@@ -242,17 +307,16 @@ export const getStaticProps: GetStaticProps<DataProps> = async () => {
       props: {
         categories,
         productsList,
+        whiteLabelConfig,
       },
-      revalidate: 60 * 60 * 1, // Refresh a cada 1 hora
+      revalidate: 60 * 60 * 1, // Refresh every 1 hour
     };
   } catch (error) {
-    // console.log("Erro ao buscar os dados:", error);
     return {
       props: {
-        props: {
-          categories: [],
-          productsList: [],
-        },
+        categories: [],
+        productsList: {} as DataFormatedProps,
+        whiteLabelConfig: {} as WhiteLabelProps["whiteLabelConfig"],
       },
     };
   }

@@ -1,26 +1,37 @@
 import type { Config } from "tailwindcss";
+import plugin from "tailwindcss/plugin";
 
 const config: Config = {
   content: ["./src/**/*.tsx"],
   theme: {
     extend: {
       colors: {
-        // primary: "var(--primary-color)",
-        primary: "#4F372F",
-        brown500: "#4F372F",
-        black: "#121212",
+        primary: "var(--primary-color)",
+        header: "var(--header-color)",
+        brown500: "#4f372f",
+
+        black: "#2C2C2C",
+
         gray40: "#464646",
         gray30: "#5F5F5F",
-        gray20: "#8A94A4",
+        gray20: "#8a94a4",
         gray10: "#dadada",
-        gray5: "#EEEEEE",
-        gradient: "#36231C",
-        blue10: " #F8F9FA",
+        gray5: "#eeeeee",
+        blue10: " #f8F9fa",
 
         white: "#ffffff",
       },
     },
   },
-  plugins: [],
+  plugins: [
+    plugin(function ({ addBase }) {
+      addBase({
+        ":root": {
+          "--primary": "#4F372F",
+          "--header": "#4F372F",
+        },
+      });
+    }),
+  ],
 };
 export default config;

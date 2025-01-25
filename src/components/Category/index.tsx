@@ -22,14 +22,22 @@ export function Category({
     >
       {/* Div da imagem */}
       <div className="flex w-full items-center justify-center">
-        <Image
-          className="rounded-full aspect-square object-cover"
-          src={imageUrl}
-          alt=""
-          width={72}
-          height={72}
-          style={{ objectFit: "cover" }}
-        />
+        <div
+          className={`${
+            isActive
+              ? "ring-2 ring-primary ring-offset-2 ring-offset-white rounded-full"
+              : ""
+          }`}
+        >
+          <Image
+            className="rounded-full aspect-square object-cover"
+            src={imageUrl}
+            alt=""
+            width={72}
+            height={72}
+            style={{ objectFit: "cover" }}
+          />
+        </div>
       </div>
       {/* Div do texto*/}
       <div className="flex w-full mt-10  items-center justify-center">
@@ -47,7 +55,7 @@ export function Category({
             rounded-lg
             justify-center
             border-2
-            border-black"
+            border-primary"
         />
       )}
     </div>
