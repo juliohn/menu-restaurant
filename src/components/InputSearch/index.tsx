@@ -17,7 +17,7 @@ function InputSearchComponent({ value, onChange, ...props }: InputProps) {
         placeholder="Search menu items"
         aria-label="Search menu items"
         data-testid="search-input"
-        className="flex-1 border-0 bg-transparent p-0 text-black placeholder-black focus:outline-none focus:ring-0"
+        className="flex-1 border-0 bg-transparent p-0 text-black2 placeholder-black focus:outline-none focus:ring-0"
         {...props}
       />
     </div>

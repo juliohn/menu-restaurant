@@ -17,8 +17,8 @@ export function ProductItemOption({
   return (
     <label className="flex items-center py-2 ">
       <div className="flex-grow flex flex-col">
-        <p className="font-medium text-black text-base">{name}</p>
-        <span className="text-gray-40 font-normal text-base">
+        <p className="font-medium text-black1 text-base">{name}</p>
+        <span className="text-gray40 font-normal text-base">
           {formatCurrencyDecimals(price)}
         </span>
       </div>

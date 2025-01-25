@@ -1,18 +1,7 @@
 import { ChevronUp, ChevronDown } from "lucide-react";
-import { ProductProps } from "../../types";
-
-interface MenuSectionProps {
-  sectionId: string;
-  title: string;
-  isExpanded: boolean;
-  onToggle: () => void;
-  items: ProductProps[];
-  ItemComponent: React.ComponentType<{ item: ProductProps }>;
-  filteredItems: ProductProps[];
-}
+import { MenuSectionProps } from "@types";
 
 export function MenuSection({
-  sectionId,
   title,
   isExpanded,
   onToggle,
@@ -26,11 +15,11 @@ export function MenuSection({
         className="flex justify-between items-center cursor-pointer"
         onClick={onToggle}
       >
-        <h1 className="text-black font-medium text-2xl">{title}</h1>
+        <h1 className="text-black1 font-medium text-2xl">{title}</h1>
         {isExpanded ? (
-          <ChevronUp className="text-black" />
+          <ChevronUp className="text-primary" />
         ) : (
-          <ChevronDown className="text-black" />
+          <ChevronDown className="text-primary" />
         )}
       </div>
 

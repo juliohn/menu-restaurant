@@ -10,7 +10,8 @@ const config: Config = {
         header: "var(--header-color)",
         brown500: "#4f372f",
 
-        black: "#2C2C2C",
+        black1: "#121212",
+        black2: "#2C2C2C",
 
         gray40: "#464646",
         gray30: "#5F5F5F",

@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-interface categoryProps {
+interface CategoryProps {
   id: string;
   imageUrl: string;
   name: string;
@@ -14,49 +14,39 @@ export function Category({
   name,
   onClick,
   isActive = false,
-}: categoryProps) {
+}: CategoryProps) {
   return (
     <div
-      className="flex-col justify-between  w-full h-44 mt-5"
+      role="button"
+      aria-label={`Categoria ${name}`}
+      className="flex-col w-full md:w-[104px] h-[146px] mt-5 px-2 mr-3"
       onClick={() => onClick(id)}
     >
       {/* Div da imagem */}
-      <div className="flex w-full items-center justify-center">
+      <div className="flex w-full items-center h-[82px] justify-center">
         <div
-          className={`${
+          className={
             isActive
               ? "ring-2 ring-primary ring-offset-2 ring-offset-white rounded-full"
               : ""
-          }`}
+          }
         >
           <Image
             className="rounded-full aspect-square object-cover"
             src={imageUrl}
-            alt=""
-            width={72}
-            height={72}
-            style={{ objectFit: "cover" }}
+            alt={`Imagem da categoria ${name}`}
+            width={74}
+            height={74}
           />
         </div>
       </div>
       {/* Div do texto*/}
-      <div className="flex w-full mt-10  items-center justify-center">
-        <span>{name}</span>
+      <div className="flex w-full flex-col h-[62px] items-center justify-center">
+        <span className={isActive ? "font-bold" : ""}>{name}</span>
       </div>
       {/* Div do active*/}
       {isActive && (
-        <div
-          className="
-            flex
-            mt-6
-            px-4
-            mx-4
-            item-center
-            rounded-lg
-            justify-center
-            border-2
-            border-primary"
-        />
+        <div className="flex w-full items-center rounded-lg justify-center border-2 border-primary" />
       )}
     </div>
   );

@@ -1,12 +1,11 @@
-import { DrinkItemprops } from "@/types";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "@/store";
+import { DrinkItemProps } from "@/types";
+import { useAppDispatch } from "@/hooks";
 import { addProduct } from "@/store/basket";
 
 import { formatCurrencyDecimals } from "@/utils";
 
-export function DrinkItem({ item }: DrinkItemprops) {
-  const dispatch: AppDispatch = useDispatch();
+export function DrinkItem({ item }: DrinkItemProps) {
+  const dispatch = useAppDispatch();
 
   const handleAddItem = () => {
     const newItem = {
@@ -19,15 +18,15 @@ export function DrinkItem({ item }: DrinkItemprops) {
   return (
     <div className="flex gap-3 md:mb-10">
       <div className="w-4/5 rounded-lg flex flex-col justify-between">
-        <h2 className="text-black font-medium text-base">{item.name}</h2>
+        <h2 className="text-black1 font-medium text-base">{item.name}</h2>
 
         {item.description && (
-          <div className="truncate-2-lines text-base text-gray400 font-light">
+          <div className="truncate-2-lines text-base text-gray40 font-light">
             {item.description}
           </div>
         )}
 
-        <div className=" text-base font-medium text-black">
+        <div className="text-base font-medium text-gray40">
           {formatCurrencyDecimals(item.price)}
         </div>
       </div>
@@ -35,7 +34,8 @@ export function DrinkItem({ item }: DrinkItemprops) {
       <div className="w-2/5 flex rounded-xl items-center justify-end">
         <button
           onClick={handleAddItem}
-          className=" bg-brown500 px-4 py-1 text-white font-medium text-base rounded-md"
+          aria-label={`Adicionar ${item.name} ao carrinho`}
+          className="bg-brown500 px-4 py-1 text-white font-medium text-base rounded-md hover:bg-brown600 transition-colors"
         >
           +
         </button>

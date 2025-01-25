@@ -14,22 +14,25 @@ export function ProductItem({ item }: ItemProps) {
   const router = useRouter();
 
   const openProductModal = () => {
-    // - navega para rota de detalhe do produto
+    // Navigate to product detail route
     router.push(`/product/${item.id}`);
   };
 
   return (
-    <div className="flex gap-3" onClick={() => openProductModal()}>
+    <button
+      onClick={openProductModal}
+      className="flex gap-3 w-full hover:opacity-90 transition-opacity text-left"
+    >
       <div className="w-4/5 rounded-lg flex flex-col">
-        <h2 className="text-black font-medium text-base">{item.name}</h2>
+        <h2 className="text-black1 font-medium text-base">{item.name}</h2>
 
         {item.description && (
-          <div className="truncate-2-lines text-base text-gray400 font-light">
+          <div className="truncate-2-lines text-base text-gray40 font-light">
             {item.description}
           </div>
         )}
 
-        <div className=" text-base font-medium text-black">
+        <div className="text-base font-medium text-gray40">
           {formatCurrencyDecimals(item.price)}
         </div>
       </div>
@@ -39,9 +42,10 @@ export function ProductItem({ item }: ItemProps) {
           src={item.imageUrl}
           alt={item.name}
           fill
+          loading="lazy"
           className="object-cover rounded-lg"
         />
       </div>
-    </div>
+    </button>
   );
 }

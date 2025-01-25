@@ -1,6 +1,12 @@
+// React e bibliotecas externas
 import { useState, ChangeEvent, useEffect } from "react";
 import { GetStaticProps } from "next";
+import { ReplyAll } from "lucide-react";
 
+// Hooks
+import { useAppDispatch } from "@hooks";
+
+// Componentes
 import { Category } from "@/components/Category";
 import { InputSearch } from "@/components/InputSearch";
 import { ProductItem } from "@/components/ProductItem";
@@ -9,33 +15,20 @@ import { ResumeBasket } from "@/components/ResumeBasket";
 import { MenuSection } from "@/components/MenuSection";
 import { Loading } from "@/components/Loading";
 
-import { ProductProps, DrinkProps, imageProps } from "../types";
+// Types
+import {
+  ProductProps,
+  Section,
+  CategoriesProps,
+  DataFormatedProps,
+  WhiteLabelProps,
+} from "../types";
 
-import { ReplyAll } from "lucide-react";
+// Redux actions
+import { setWhiteLabelConfig } from "@/store/whitelabel";
 
+// API
 import { api } from "@/api/axios";
-
-interface Section {
-  id: number;
-  name: string;
-  items: ProductProps[];
-}
-
-interface CategoriesProps {
-  id: string;
-  name: string;
-  imageUrl: string;
-  images: imageProps[];
-}
-
-interface DataFormatedProps {
-  [key: string]: ProductProps[];
-}
-
-interface DataProps {
-  categories?: CategoriesProps[];
-  productsList?: DataFormatedProps | undefined;
-}
 
 // Adicione essa configuração no início do componente Home
 const SECTIONS_CONFIG = {
@@ -58,42 +51,6 @@ const SECTIONS_CONFIG = {
 
 // Add this type definition near the top of the file, after other interfaces
 type SectionId = keyof typeof SECTIONS_CONFIG;
-
-import { useAppSelector, useAppDispatch } from "../hooks";
-import { setWhiteLabelConfig } from "@/store/whitelabel";
-
-interface WhiteLabelProps extends DataProps {
-  whiteLabelConfig: {
-    id: number;
-    name: string;
-    internalName: string;
-    description: string | null;
-    liveFlag: number;
-    demoFlag: number;
-    address1: string;
-    address2: string;
-    address3: string | null;
-    city: string;
-    county: string;
-    postcode: string;
-    country: string;
-    timezoneOffset: string;
-    locale: string;
-    timeZone: string;
-    webSettings: {
-      id: number;
-      venueId: number;
-      bannerImage: string;
-      backgroundColour: string;
-      primaryColour: string;
-      primaryColourHover: string;
-      navBackgroundColour: string;
-    };
-    ccy: string;
-    ccySymbol: string;
-    currency: string;
-  };
-}
 
 export default function Home({
   categories,
@@ -138,7 +95,6 @@ export default function Home({
     return <Loading />;
   }
 
-  // Update the toggle function
   const toggleSection = (section: SectionId) => {
     setExpandedSections((prev) => ({
       ...prev,
@@ -174,8 +130,8 @@ export default function Home({
       </div>
 
       <div className="flex mt-8">
-        <div className="w-full md:w-3/5 bg-brand-primary shadow-2xl">
-          <div className="flex w-full items-center">
+        <div className="w-full md:w-3/5 shadow-2xl">
+          <div className="flex w-full  h-[190px] items-start ">
             {categories!.map((category) => (
               <Category
                 key={category.id}
@@ -194,8 +150,11 @@ export default function Home({
 
           <div className="mt-4">
             {isActiveCategory !== "all" && (
-              <div className="flex w-full justify-center items-center gap-2 py-4 cursor-pointer">
-                <a
+              <div className="flex w-full justify-center items-center gap-2 py-4">
+                <button
+                  type="button"
+                  role="button"
+                  aria-label="Resetar todos os filtros"
                   className="flex items-center gap-2 text-primary hover:text-primary/80 transition-colors"
                   onClick={() => {
                     setIsActiveCategory("all");
@@ -205,7 +164,7 @@ export default function Home({
                 >
                   <ReplyAll size={20} />
                   <span>Reset filters</span>
-                </a>
+                </button>
               </div>
             )}
 
@@ -216,7 +175,6 @@ export default function Home({
               return (
                 <MenuSection
                   key={sectionId}
-                  sectionId={sectionId as SectionId}
                   title={config.title}
                   isExpanded={expandedSections[sectionId as SectionId]}
                   onToggle={() => toggleSection(sectionId as SectionId)}

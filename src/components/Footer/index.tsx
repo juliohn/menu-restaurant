@@ -20,10 +20,7 @@ export function Footer() {
   return (
     <footer className="md:hidden  bg-gray5 mt-4 p-10 items-center">
       <div className="bg-white rounded-md  text-center mb-6">
-        <Link
-          href={"#"}
-          className="text-bold text-brown500 underline text-base"
-        >
+        <Link href={"#"} className="text-bold text-primary underline text-base">
           View allergy information
         </Link>
       </div>

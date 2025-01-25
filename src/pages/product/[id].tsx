@@ -1,23 +1,21 @@
 "use client";
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-
 import { useRouter } from "next/router";
 import { GetStaticPaths, GetStaticProps } from "next";
 import Image from "next/image";
+import { Dot, X } from "lucide-react";
 
-import { AppDispatch } from "@/store";
 import { addProduct } from "@/store/basket";
+import { api } from "@/api/axios";
+import { ModifierProps, ProductProps } from "@/types";
 
 import { ProductItemOption } from "@/components/ProductItemOption";
 import { Modal } from "@/components/Modal";
 import { Loading } from "@/components/Loading";
+import { QuantityControls } from "@/components/QuantityControls";
 
-import { api } from "@/api/axios";
-import { formatCurrencyDecimals } from "@/utils";
-import { ModifierProps, ProductProps } from "@/types";
-
-import { Dot, Minus, Plus, X } from "lucide-react";
+import { useAppDispatch } from "@/hooks";
+import { useProduct } from "@/hooks/useProduct";
 
 interface ProductDetailsInterface {
   product: ProductProps;
@@ -25,40 +23,19 @@ interface ProductDetailsInterface {
 
 export default function ProductDetails({ product }: ProductDetailsInterface) {
   const { isFallback } = useRouter();
-
-  if (isFallback) {
-    return <Loading />;
-  }
-
-  const dispatch: AppDispatch = useDispatch();
-
+  const dispatch = useAppDispatch();
   const router = useRouter();
-
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const [quantity, setQuantity] = useState(1);
-
-  // - Começa sempre com o primeiro indice selecionado
-  const [selectedOption, setSelectedOption] = useState<string>(
-    product.modifiers[0].items[0].id.toString()
-  );
-
-  const handleAddQuantity = () => setQuantity(quantity + 1);
-
-  const handleRemoveQuantity = () =>
-    setQuantity(quantity > 1 ? quantity - 1 : 1);
-
-  const handleOptionChange = (option: string) => {
-    setSelectedOption(option.toString());
-  };
-
-  const handleCalculator = () => {
-    const item = product.modifiers[0].items.find(
-      (md) => md.id.toString() === selectedOption
-    );
-
-    return formatCurrencyDecimals(quantity * item!.price);
-  };
+  const {
+    quantity,
+    selectedOption,
+    selectedItem,
+    totalPrice,
+    handleAddQuantity,
+    handleRemoveQuantity,
+    setSelectedOption,
+  } = useProduct({ product });
 
   const closeModal = () => {
     setIsModalOpen(false);
@@ -66,15 +43,13 @@ export default function ProductDetails({ product }: ProductDetailsInterface) {
   };
 
   const handleAddItem = () => {
-    const option = product.modifiers[0].items.find(
-      (md) => md.id.toString() === selectedOption
-    );
+    if (!selectedItem) return;
 
     const newItem = {
       name: product.name,
-      id: option!.id,
-      variant: option!.name,
-      price: option!.price,
+      id: selectedItem.id,
+      variant: selectedItem.name,
+      price: selectedItem.price,
       quantity,
     };
 
@@ -86,7 +61,11 @@ export default function ProductDetails({ product }: ProductDetailsInterface) {
     if (router.isReady) {
       setIsModalOpen(true);
     }
-  }, [product, router.isReady]);
+  }, [router.isReady]);
+
+  if (isFallback) {
+    return <Loading />;
+  }
 
   return (
     <Modal isOpen={isModalOpen} onClose={closeModal}>
@@ -102,7 +81,7 @@ export default function ProductDetails({ product }: ProductDetailsInterface) {
 
           <button
             onClick={closeModal}
-            className="absolute top-8 right-4 text-brown500 hover:cursor-point bg-white p-1 rounded-full"
+            className="absolute top-8 right-4 text-primary hover:cursor-point bg-white p-1 rounded-full"
             aria-label="Close Modal"
           >
             <X />
@@ -111,14 +90,12 @@ export default function ProductDetails({ product }: ProductDetailsInterface) {
 
         <div className="flex flex-col flex-1 overflow-auto p-4">
           <h2 className="text-2xl font-bold mb-2">{product.name}</h2>
-          <p className="text-gray-40 font-normal text-base mb-2">
+          <p className="text-gray40 font-normal text-base mb-2">
             {product.description}
           </p>
           <div className=" mb-2 py-4">
-            <p className=" text-gray-40 text-base font-bold">
-              Choose your size
-            </p>
-            <p className=" text-gray-30 font-normal">Select 1 option</p>
+            <p className=" text-gray40 text-base font-bold">Choose your size</p>
+            <p className=" text-gray30 font-normal">Select 1 option</p>
           </div>
           <div className="flex flex-col gap-4 mb-4">
             {product.modifiers[0].items.map((option: ModifierProps) => {
@@ -128,41 +105,27 @@ export default function ProductDetails({ product }: ProductDetailsInterface) {
                   name={option.name}
                   price={option.price}
                   isSelected={option.id.toString() === selectedOption}
-                  handleOptionChange={handleOptionChange}
+                  handleOptionChange={setSelectedOption}
                   value={option.id}
                 />
               );
             })}
           </div>
-          <div className="flex justify-center items-center mb-4">
-            <button
-              onClick={handleRemoveQuantity}
-              className="bg-gray10
-              justify-center
-              items-center
-              p-1
-              rounded-full"
-            >
-              <Minus className="text-center" />
-            </button>
-            <span className="mx-8 text-lg font-semibold">{quantity}</span>
-            <button
-              onClick={handleAddQuantity}
-              className="bg-brown500
-              justify-center
-              items-center
-              p-1
-              rounded-full"
-            >
-              <Plus className="text-white" />
-            </button>
+          <div className="flex justify-center mb-4">
+            <QuantityControls
+              isCart={false}
+              quantity={quantity}
+              itemName={product.name}
+              onAdd={handleAddQuantity}
+              onRemove={handleRemoveQuantity}
+            />
           </div>
 
           <button
             onClick={() => handleAddItem()}
             className="w-full flex justify-center bg-brown500 px-8 py-2  text-white font-bold rounded-3xl"
           >
-            Add to Order <Dot /> {handleCalculator()}
+            Add to Order <Dot /> {totalPrice}
           </button>
         </div>
       </div>
@@ -178,62 +141,46 @@ export const getStaticPaths: GetStaticPaths = async () => {
   };
 };
 
-export const getStaticProps: GetStaticProps = async (context) => {
+export const getStaticProps: GetStaticProps = async ({ params }) => {
   try {
-    const id = context.params?.id;
+    const id = params?.id as string;
+    const { data } = await api.get("challenge/menu");
 
-    const response = await api.get("challenge/menu");
-    const data = response.data;
-
-    let product = null;
-
-    // - procura o id do produto na categoria burguer
-    const findProductInBurguers = data.sections[0].items.find(
-      (item: ProductProps) => item.id.toString() === id
+    // Procura o produto em todas as seções
+    const product = data.sections.reduce(
+      (found: ProductProps | null, section: { items: ProductProps[] }) => {
+        if (found) return found;
+        return section.items.find(
+          (item: ProductProps) => item.id.toString() === id
+        );
+      },
+      null
     );
 
-    if (findProductInBurguers) {
-      product = findProductInBurguers;
+    if (!product) {
+      return { notFound: true };
     }
 
-    // - procura o id do produto na categoria dessert
-    const findProductInDisserts = data.sections[2].items.find(
-      (item: ProductProps) => item.id.toString() === id
-    );
+    // Normaliza os modificadores para um formato padrão
+    const modifiers = product.modifiers ?? [
+      {
+        id: product.id,
+        items: [{ ...product }],
+      },
+    ];
 
-    if (findProductInDisserts != undefined) {
-      product = findProductInDisserts;
-    }
-
-    // - formata para exibir usando o mesmo component para desserts e burguers
-    const modifiers =
-      product.modifiers === undefined
-        ? [
-            {
-              id: product.id,
-              items: [{ ...product }],
-            },
-          ]
-        : product.modifiers;
-
-    product = {
+    const normalizedProduct = {
       ...product,
       imageUrl: product.images[0].image,
       modifiers,
     };
 
     return {
-      props: {
-        product,
-      },
-      revalidate: 60 * 60 * 1, // - Refresh a cada 1 hora
+      props: { product: normalizedProduct },
+      revalidate: 60 * 60, // 1 hora
     };
   } catch (error) {
-    console.log("Erro ao buscar os dados:", error);
-    return {
-      props: {
-        product: [],
-      },
-    };
+    console.error("Erro ao buscar os dados:", error);
+    return { notFound: true };
   }
 };
