@@ -37,8 +37,6 @@ export default function ProductDetails({ product }: ProductDetailsInterface) {
     setSelectedOption,
   } = useProduct({ product });
 
-  console.log("=== selectedOption", selectedOption);
-
   const closeModal = () => {
     setIsModalOpen(false);
     router.push("/");
@@ -100,7 +98,7 @@ export default function ProductDetails({ product }: ProductDetailsInterface) {
             <p className=" text-gray30 font-normal">Select 1 option</p>
           </div>
           <div className="flex flex-col gap-4 mb-4">
-            {product.modifiers[0].items.map((option: ModifierProps) => {
+            {product.modifiers?.[0]?.items?.map((option: ModifierProps) => {
               return (
                 <ProductItemOption
                   key={option.id}
@@ -164,12 +162,21 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     }
 
     // Normaliza os modificadores para um formato padrão
-    const modifiers = product.modifiers ?? [
-      {
-        id: product.id,
-        items: [{ ...product }],
-      },
-    ];
+    const modifiers =
+      product.modifiers && product.modifiers.length > 0
+        ? product.modifiers
+        : [
+            {
+              id: product.id,
+              items: [
+                {
+                  id: product.id,
+                  name: product.name,
+                  price: product.price,
+                },
+              ],
+            },
+          ];
 
     const normalizedProduct = {
       ...product,
