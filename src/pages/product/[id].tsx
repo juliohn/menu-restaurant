@@ -99,7 +99,7 @@ export default function ProductDetails({ product }: ProductDetailsInterface) {
           </div>
 
           <div className="flex flex-col gap-4 mb-4">
-            {product.modifiers?.[0]?.items?.map((option: ModifierProps) => {
+            {product.modifiers[0].items.map((option: ModifierProps) => {
               return (
                 <ProductItemOption
                   key={option.id}
@@ -134,63 +134,73 @@ export default function ProductDetails({ product }: ProductDetailsInterface) {
   );
 }
 
-// Função para gerar as páginas estáticas
+// Função auxiliar para buscar os dados do menu
+async function getMenuData() {
+  try {
+    const { data } = await api.get("challenge/menu");
+    return data;
+  } catch (error) {
+    console.error("Error fetching menu data:", error);
+    return null;
+  }
+}
+
 export const getStaticPaths: GetStaticPaths = async () => {
   return {
-    paths: [],
-    fallback: false,
+    paths: [], // Não pré-gera nenhuma página
+    fallback: "blocking", // Usa SSR na primeira vez que a página é acessada
   };
 };
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-  try {
-    const id = params?.id as string;
-    const { data } = await api.get("challenge/menu");
-
-    // Procura o produto em todas as seções
-    const product = data.sections.reduce(
-      (found: ProductProps | null, section: { items: ProductProps[] }) => {
-        if (found) return found;
-        return section.items.find(
-          (item: ProductProps) => item.id.toString() === id
-        );
-      },
-      null
-    );
-
-    if (!product) {
-      return { notFound: true };
-    }
-
-    // Normaliza os modificadores para um formato padrão
-    const modifiers =
-      product.modifiers && product.modifiers.length > 0
-        ? product.modifiers
-        : [
-            {
-              id: product.id,
-              items: [
-                {
-                  id: product.id,
-                  name: product.name,
-                  price: product.price,
-                },
-              ],
-            },
-          ];
-
-    const normalizedProduct = {
-      ...product,
-      imageUrl: product.images[0].image,
-      modifiers,
-    };
-
-    return {
-      props: { product: normalizedProduct },
-      revalidate: 60 * 60, // 1 hora
-    };
-  } catch (error) {
-    console.error("Erro ao buscar os dados:", error);
+  if (!params?.id) {
     return { notFound: true };
   }
+
+  const menuData = await getMenuData();
+
+  if (!menuData) {
+    return { notFound: true };
+  }
+
+  const id = params.id as string;
+
+  // Procura o produto em todas as seções
+  const product = menuData.sections.reduce(
+    (found: ProductProps | null, section: { items: ProductProps[] }) => {
+      if (found) return found;
+      return section.items.find(
+        (item: ProductProps) => item.id.toString() === id
+      );
+    },
+    null
+  );
+
+  if (!product) {
+    return { notFound: true };
+  }
+
+  const normalizedProduct = {
+    ...product,
+    imageUrl: product.images?.[0]?.image || "",
+    modifiers: product.modifiers || [
+      {
+        id: product.id,
+        items: [
+          {
+            id: product.id,
+            name: product.name,
+            price: product.price,
+          },
+        ],
+      },
+    ],
+  };
+
+  return {
+    props: {
+      product: normalizedProduct,
+    },
+    revalidate: 60 * 60, // 1 hora
+  };
 };
