@@ -8,8 +8,9 @@ interface WhiteLabelState {
 }
 
 const initialState: WhiteLabelState = {
-  primaryColour: "#FF0000",
-  navBackgroundColour: "#FFFFFF",
+  primaryColour: "#4F372F",
+  navBackgroundColour: "#4F372F",
+  locale: "pt-BR",
   bannerImage:
     "https://preodemo.gumlet.io/usr/venue/7602/web/646fbf3abf9d0.png",
 };
