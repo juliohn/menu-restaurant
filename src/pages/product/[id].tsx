@@ -97,6 +97,7 @@ export default function ProductDetails({ product }: ProductDetailsInterface) {
             <p className=" text-gray40 text-base font-bold">Choose your size</p>
             <p className=" text-gray30 font-normal">Select 1 option</p>
           </div>
+
           <div className="flex flex-col gap-4 mb-4">
             {product.modifiers?.[0]?.items?.map((option: ModifierProps) => {
               return (
@@ -137,18 +138,13 @@ export default function ProductDetails({ product }: ProductDetailsInterface) {
 export const getStaticPaths: GetStaticPaths = async () => {
   return {
     paths: [],
-    fallback: true,
+    fallback: false,
   };
 };
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   try {
     const id = params?.id as string;
-
-    if (!id) {
-      return { notFound: true };
-    }
-
     const { data } = await api.get("challenge/menu");
 
     // Procura o produto em todas as seções
