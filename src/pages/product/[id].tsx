@@ -144,6 +144,11 @@ export const getStaticPaths: GetStaticPaths = async () => {
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   try {
     const id = params?.id as string;
+
+    if (!id) {
+      return { notFound: true };
+    }
+
     const { data } = await api.get("challenge/menu");
 
     // Procura o produto em todas as seções
