@@ -7,9 +7,9 @@ import {
   deleteProduct,
 } from "@/store/basket";
 
-import { Minus, Plus, Trash } from "lucide-react";
+import { Trash } from "lucide-react";
 
-import { formatCurrencyDecimals } from "@/utils";
+import { useFormatCurrency } from "@/hooks";
 
 import { useBasketCalculations } from "@/hooks/useBasketCalculations";
 
@@ -19,6 +19,8 @@ export function ResumeBasket() {
   const dispatch = useAppDispatch();
 
   const basket = useAppSelector((state) => state.basket);
+
+  const { formatCurrencyDecimals } = useFormatCurrency();
 
   const items = basket.items;
 
@@ -87,11 +89,11 @@ export function ResumeBasket() {
           <div className="md:p-4">
             <div className="flex justify-between mt-2 py-2">
               <span className="text-gray-600">Subtotal</span>
-              <span className="font-semibold">R$ {calculateTotal}</span>
+              <span className="font-semibold"> {calculateTotal}</span>
             </div>
             <div className="flex justify-between border-t border-gray5 mt-4 py-4">
               <span className="text-lg font-semibold">Total</span>
-              <span className="text-lg font-semibold">R$ {calculateTotal}</span>
+              <span className="text-lg font-semibold"> {calculateTotal}</span>
             </div>
           </div>
         </>

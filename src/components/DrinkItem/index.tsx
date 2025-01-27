@@ -2,10 +2,12 @@ import { DrinkItemProps } from "@/types";
 import { useAppDispatch } from "@/hooks";
 import { addProduct } from "@/store/basket";
 
-import { formatCurrencyDecimals } from "@/utils";
+import { useFormatCurrency } from "@/hooks";
 
 export function DrinkItem({ item }: DrinkItemProps) {
   const dispatch = useAppDispatch();
+
+  const { formatCurrencyDecimals } = useFormatCurrency();
 
   const handleAddItem = () => {
     const newItem = {

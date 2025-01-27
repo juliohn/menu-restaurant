@@ -73,7 +73,7 @@ export default function Home({
     if (categories && productsList) {
       setIsLoading(false);
     }
-    console.log("===", whiteLabelConfig);
+    // console.log("===", whiteLabelConfig);
   }, [categories, productsList, whiteLabelConfig]);
 
   useEffect(() => {
@@ -88,7 +88,13 @@ export default function Home({
     );
 
     // Atualiza o estado do Redux
-    dispatch(setWhiteLabelConfig(whiteLabelConfig.webSettings));
+    dispatch(
+      setWhiteLabelConfig({
+        ...whiteLabelConfig.webSettings,
+        locale: whiteLabelConfig.locale,
+        // locale: "en-US",
+      })
+    );
   }, [dispatch, whiteLabelConfig]);
 
   if (isLoading) {

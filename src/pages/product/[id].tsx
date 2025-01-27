@@ -37,6 +37,8 @@ export default function ProductDetails({ product }: ProductDetailsInterface) {
     setSelectedOption,
   } = useProduct({ product });
 
+  console.log("=== selectedOption", selectedOption);
+
   const closeModal = () => {
     setIsModalOpen(false);
     router.push("/");
@@ -106,7 +108,7 @@ export default function ProductDetails({ product }: ProductDetailsInterface) {
                   price={option.price}
                   isSelected={option.id.toString() === selectedOption}
                   handleOptionChange={setSelectedOption}
-                  value={option.id}
+                  value={option.id.toString()}
                 />
               );
             })}

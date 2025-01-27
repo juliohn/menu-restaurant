@@ -1,4 +1,4 @@
-import { formatCurrencyDecimals } from "@/utils";
+import { useFormatCurrency } from "@/hooks";
 
 interface ProductItemOptionprops {
   name: string;
@@ -14,6 +14,8 @@ export function ProductItemOption({
   isSelected,
   value,
 }: ProductItemOptionprops) {
+  const { formatCurrencyDecimals } = useFormatCurrency();
+
   return (
     <label className="flex items-center py-2 ">
       <div className="flex-grow flex flex-col">
@@ -29,7 +31,7 @@ export function ProductItemOption({
           name="product-option"
           value={value}
           checked={isSelected}
-          onChange={() => handleOptionChange(value)}
+          onChange={() => handleOptionChange(value.toString())}
           className="appearance-none border-2 border-gray30 rounded-full w-4 h-4 checked:bg-black"
         />
       </div>

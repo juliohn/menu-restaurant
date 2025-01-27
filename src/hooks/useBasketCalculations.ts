@@ -1,14 +1,15 @@
 import { useMemo } from "react";
 import { BasketItem } from "@/store/basket";
-import { formatCurrencyDecimals } from "@/utils";
+import { useFormatCurrency } from "@/hooks";
 
 export const useBasketCalculations = (items: BasketItem[]) => {
+  const { formatCurrencyDecimals } = useFormatCurrency();
   const calculateTotal = useMemo(
     () =>
       formatCurrencyDecimals(
         items.reduce((total, item) => total + item.price * item.quantity, 0)
       ),
-    [items]
+    [items, formatCurrencyDecimals]
   );
 
   const calculateSubtotalItem = (id: string) => {

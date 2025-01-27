@@ -4,6 +4,7 @@ interface WhiteLabelState {
   primaryColour: string;
   navBackgroundColour: string;
   bannerImage: string;
+  locale: string;
 }
 
 const initialState: WhiteLabelState = {

@@ -4,7 +4,7 @@ import Image from "next/image";
 
 import { ProductProps } from "@/types";
 
-import { formatCurrencyDecimals } from "@/utils";
+import { useFormatCurrency } from "@/hooks";
 
 interface ItemProps {
   item: ProductProps;
@@ -12,6 +12,8 @@ interface ItemProps {
 
 export function ProductItem({ item }: ItemProps) {
   const router = useRouter();
+
+  const { formatCurrencyDecimals } = useFormatCurrency();
 
   const openProductModal = () => {
     // Navigate to product detail route

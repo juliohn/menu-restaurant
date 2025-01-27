@@ -1,5 +1,5 @@
 import { useState, useMemo } from "react";
-import { formatCurrencyDecimals } from "@/utils";
+import { useFormatCurrency } from "@/hooks";
 import { ProductProps } from "@/types";
 interface UseProductProps {
   product: ProductProps;
@@ -7,9 +7,10 @@ interface UseProductProps {
 }
 
 export function useProduct({ product, initialQuantity = 1 }: UseProductProps) {
+  const { formatCurrencyDecimals } = useFormatCurrency();
   const [quantity, setQuantity] = useState(initialQuantity);
   const [selectedOption, setSelectedOption] = useState<string>(
-    product.modifiers[0].items[0].id.toString()
+    product.modifiers?.[0]?.items?.[0]?.id?.toString() ?? ""
   );
 
   const handleAddQuantity = () => setQuantity((prev) => prev + 1);
@@ -18,7 +19,7 @@ export function useProduct({ product, initialQuantity = 1 }: UseProductProps) {
 
   const selectedItem = useMemo(
     () =>
-      product.modifiers[0].items.find(
+      product.modifiers?.[0]?.items?.find(
         (md) => md.id.toString() === selectedOption
       ),
     [selectedOption, product]
@@ -26,7 +27,7 @@ export function useProduct({ product, initialQuantity = 1 }: UseProductProps) {
 
   const totalPrice = useMemo(
     () => formatCurrencyDecimals(quantity * (selectedItem?.price ?? 0)),
-    [quantity, selectedItem]
+    [quantity, selectedItem, formatCurrencyDecimals]
   );
 
   return {
