@@ -59,6 +59,7 @@ export default function Home({
   productsList,
   whiteLabelConfig,
 }: WhiteLabelProps) {
+  // console.log("===", whiteLabelConfig);
   const [isLoading, setIsLoading] = useState(true);
   const [isActiveCategory, setIsActiveCategory] = useState("all");
   const [searchTerm, setSearchTerm] = useState<string>("");
@@ -101,10 +102,6 @@ export default function Home({
     );
   }, [dispatch, whiteLabelConfig]);
 
-  if (isLoading) {
-    return <Loading />;
-  }
-
   const toggleSection = (section: SectionId) => {
     setExpandedSections((prev) => ({
       ...prev,
@@ -132,6 +129,9 @@ export default function Home({
     }
     setFilteredItems(results);
   };
+  if (isLoading) {
+    return <Loading />;
+  }
 
   return (
     <div className="flex flex-col">
@@ -162,6 +162,7 @@ export default function Home({
             {isActiveCategory !== "all" && (
               <div className="flex w-full justify-center items-center gap-2 py-4">
                 <button
+                  data-testid="reset-filters-button"
                   type="button"
                   role="button"
                   aria-label="Resetar todos os filtros"
