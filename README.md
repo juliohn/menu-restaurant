@@ -1,6 +1,6 @@
 # Menu Restaurante
 
-    Este projeto simula um menu de restaurante que permite aos usuários visualizar e adicionar itens ao carrinho de compras.
+    Este projeto simula um menu de restaurante que permite aos usuários visualizar e adicionar itens ao carrinho de compras, pode filtrar itens por categoria e por nome e ainda escolher uma variacao do produto quando disponivel
 
 ## Pré-requisitos
 
@@ -47,6 +47,7 @@ Os testes são feitos com Jest e React Testing Library.
 - O projeto usa os dados da API para manter a cor primaria, cor do header e banner da aplicacao, bem como a localizcao PT-BR para o idioma default e moeda BRL.
 - Pode ser alterado o idioma para EN-US e a moeda para USD utiliando o botao ao lado direoto do header da aplicacao.
 - O Projeto esta totalmente responsivo, e foi testado em um dispositivo mobile.
+- Implemntado pagina de contato e login fake apenas para simular a funcionalidade do menu de navegacao
 
 - O projeto foi postado na vercel, e pode ser acessado em:
  https://menu-restaurant-4hct0pd7f-juliohns-projects.vercel.app/
