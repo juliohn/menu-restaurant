@@ -1,11 +1,17 @@
 "use client";
+// React and Next.js imports
 import { useState } from "react";
-import { Menu, X } from "lucide-react";
 import Image from "next/image";
-import { useAppSelector, useAppDispatch } from "@hooks";
-import { store } from "@/store";
+import Link from "next/link";
+
+// External library imports
+import { Menu, X } from "lucide-react";
 import { useTranslation } from "react-i18next";
+
+// Internal imports
+import { useAppSelector, useAppDispatch } from "@hooks";
 import { setWhiteLabelConfig } from "@/store/whitelabel";
+import { store } from "@/store";
 
 export function Header() {
   const dispatch = useAppDispatch();
@@ -14,6 +20,7 @@ export function Header() {
   const locale = useAppSelector((state) => state.whitelabel.locale);
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [activeItem, setActiveItem] = useState("menu");
   const { t, i18n } = useTranslation();
 
   const toggleMenu = () => {
@@ -22,7 +29,6 @@ export function Header() {
 
   const toggleLanguage = () => {
     const newLang = i18n.language === "pt-BR" ? "en-US" : "pt-BR";
-    // i18n.changeLanguage(newLang);
 
     dispatch(
       setWhiteLabelConfig({
@@ -32,6 +38,10 @@ export function Header() {
     );
 
     setIsMenuOpen(false);
+  };
+
+  const handleMenuClick = (item: string) => {
+    setActiveItem(item);
   };
 
   return (
@@ -66,29 +76,40 @@ export function Header() {
             {/* Desktop menu */}
             <div className="hidden md:flex justify-center items-center">
               <div className="relative w-56 text-center">
-                <a
-                  href="#"
+                <Link
+                  href="/"
+                  onClick={() => handleMenuClick("menu")}
                   className="text-lg pb-2.5 inline-block hover:text-gray-200 transition-colors"
                 >
                   {t("menu").toUpperCase()}
-                </a>
-                <div className="absolute bottom-0 left-0 w-full h-[5px] bg-white"></div>
+                </Link>
+                {activeItem === "menu" && (
+                  <div className="absolute bottom-0 left-0 w-full h-[5px] bg-white"></div>
+                )}
               </div>
-              <div className="w-56 text-center">
-                <a
-                  href="#"
-                  className="text-lg hover:text-gray-200 transition-colors"
+              <div className="relative w-56 text-center">
+                <Link
+                  href="/login"
+                  onClick={() => handleMenuClick("login")}
+                  className="text-lg pb-2.5 inline-block hover:text-gray-200 transition-colors"
                 >
-                  {t("login").toUpperCase()}
-                </a>
+                  {t("menu_login").toUpperCase()}
+                </Link>
+                {activeItem === "login" && (
+                  <div className="absolute bottom-0 left-0 w-full h-[5px] bg-white"></div>
+                )}
               </div>
-              <div className="w-56 text-center">
-                <a
-                  href="#"
-                  className="text-lg hover:text-gray-200 transition-colors"
+              <div className="relative w-56 text-center">
+                <Link
+                  href="/contact"
+                  onClick={() => handleMenuClick("contact")}
+                  className="text-lg pb-2.5 inline-block hover:text-gray-200 transition-colors"
                 >
-                  {t("contact").toUpperCase()}
-                </a>
+                  {t("menu_contact").toUpperCase()}
+                </Link>
+                {activeItem === "contact" && (
+                  <div className="absolute bottom-0 left-0 w-full h-[5px] bg-white"></div>
+                )}
               </div>
               <div className="w-56 text-center">
                 <button
@@ -107,24 +128,24 @@ export function Header() {
                 role="menu"
                 aria-orientation="vertical"
               >
-                <a
-                  href="#"
+                <Link
+                  href="/"
                   className="text-lg hover:bg-white/10 p-2 rounded transition-colors"
                 >
                   {t("menu")}
-                </a>
-                <a
-                  href="#"
+                </Link>
+                <Link
+                  href="/login"
                   className="text-lg hover:bg-white/10 p-2 rounded transition-colors"
                 >
-                  {t("login")}
-                </a>
-                <a
-                  href="#"
+                  {t("menu_login")}
+                </Link>
+                <Link
+                  href="/contact"
                   className="text-lg hover:bg-white/10 p-2 rounded transition-colors"
                 >
-                  {t("contact")}
-                </a>
+                  {t("menu_contact")}
+                </Link>
               </div>
             )}
           </div>

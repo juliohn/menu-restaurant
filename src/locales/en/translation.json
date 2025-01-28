@@ -3,12 +3,35 @@
   "empty_cart": "Your basket is empty",
   "search_menu_items_placeholder": "Search menu items",
   "menu": "Menu",
-  "login": "Login",
-  "contact": "Contact",
+  "menu_login": "Login",
+  "menu_contact": "Contact",
   "add_to_cart": "Add to Order",
   "choose_your_size": "Choose your size",
   "select_option": "Select 1 option",
   "clear_basket": "Empty Basket",
   "make_order": "Make Order",
-  "order_sent": "Order sent successfully!"
+  "order_sent": "Order sent successfully!",
+  "forgot_password": "Forgot Password",
+  "remember": "Remember me",
+  "email": "Email",
+  "password": "Password",
+  "submit": "Submit",
+  "login": {
+    "forgot_password": "Forgot Password",
+    "remember": "Remember me",
+    "email": "Email",
+    "password": "Password",
+    "submit": "Submit",
+    "title": "Access your account"
+  },
+  "contact": {
+    "title": "Contact Us",
+    "name": "Name",
+    "email": "Email",
+    "subject": "Subject",
+    "message": "Message",
+    "submit": "Send Message",
+    "success": "FORM SUBMITTED SUCCESSFULLY",
+    "successMessage": "Thank you for your contact!"
+  }
 }
