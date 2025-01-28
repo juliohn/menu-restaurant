@@ -26,7 +26,7 @@
     "subject": "Assunto",
     "message": "Mensagem",
     "submit": "Enviar Mensagem",
-    "success": "FORM SUBMITTED SUCCESSFULLY",
-    "successMessage": "Thank you for your contact!"
+    "success": "FORMULÁRIO ENVIADO COM SUCESSO",
+    "successMessage": "Obrigado pelo seu contato!"
   }
 }
