@@ -5,6 +5,7 @@ import {
   addProduct,
   removeProduct,
   deleteProduct,
+  clearBasket,
 } from "@/store/basket";
 
 import { useTranslation } from "react-i18next";
@@ -41,6 +42,15 @@ export function ResumeBasket() {
 
   const handleDeleteProduct = (id: string) => {
     dispatch(deleteProduct(id.toString()));
+  };
+
+  const handleClearBasket = () => {
+    dispatch(clearBasket());
+  };
+
+  const handleOrder = () => {
+    alert(t("order_sent"));
+    dispatch(clearBasket());
   };
 
   return (
@@ -98,6 +108,21 @@ export function ResumeBasket() {
             <div className="flex justify-between border-t border-gray5 mt-4 py-4">
               <span className="text-lg font-semibold">Total</span>
               <span className="text-lg font-semibold"> {calculateTotal}</span>
+            </div>
+
+            <div className="flex gap-4 mt-4">
+              <button
+                onClick={handleClearBasket}
+                className="flex-1 bg-red-600 text-white py-2 px-4 rounded hover:bg-red-700 transition-colors"
+              >
+                {t("clear_basket")}
+              </button>
+              <button
+                onClick={handleOrder}
+                className="flex-1 bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700 transition-colors"
+              >
+                {t("make_order")}
+              </button>
             </div>
           </div>
         </>

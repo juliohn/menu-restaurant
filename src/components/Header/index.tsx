@@ -2,11 +2,17 @@
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
 import Image from "next/image";
-import { useAppSelector } from "@hooks";
+import { useAppSelector, useAppDispatch } from "@hooks";
+import { store } from "@/store";
 import { useTranslation } from "react-i18next";
+import { setWhiteLabelConfig } from "@/store/whitelabel";
 
 export function Header() {
+  const dispatch = useAppDispatch();
   const { bannerImage } = useAppSelector((state) => state.whitelabel);
+
+  const locale = useAppSelector((state) => state.whitelabel.locale);
+
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { t, i18n } = useTranslation();
 
@@ -15,8 +21,17 @@ export function Header() {
   };
 
   const toggleLanguage = () => {
-    const newLang = i18n.language === "pt" ? "en" : "pt";
-    i18n.changeLanguage(newLang);
+    const newLang = i18n.language === "pt-BR" ? "en-US" : "pt-BR";
+    // i18n.changeLanguage(newLang);
+
+    dispatch(
+      setWhiteLabelConfig({
+        ...store.getState().whitelabel,
+        locale: newLang,
+      })
+    );
+
+    setIsMenuOpen(false);
   };
 
   return (
@@ -35,7 +50,7 @@ export function Header() {
                   onClick={toggleLanguage}
                   className="text-white p-2 mr-2 hover:bg-white/10 rounded-full transition-colors"
                 >
-                  {i18n.language === "pt" ? "EN" : "PT"}
+                  {locale === "pt-BR" ? "EN" : "PT"}
                 </button>
                 <button
                   onClick={toggleMenu}
@@ -80,7 +95,7 @@ export function Header() {
                   onClick={toggleLanguage}
                   className="text-lg hover:text-gray-200 transition-colors"
                 >
-                  {i18n.language === "pt" ? "EN" : "PT"}
+                  {locale === "pt-BR" ? "EN" : "PT"}
                 </button>
               </div>
             </div>

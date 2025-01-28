@@ -7,5 +7,8 @@
   "contact": "Contato",
   "add_to_cart": "Adicionar ao carrinho",
   "choose_your_size": "Escolha seu tamanho",
-  "select_option": "Selecione 1 opção"
+  "select_option": "Selecione 1 opção",
+  "clear_basket": "Esvaziar Carrinho",
+  "make_order": "Fazer Pedido",
+  "order_sent": "Pedido enviado com sucesso!"
 }

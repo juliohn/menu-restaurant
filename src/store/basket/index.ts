@@ -50,8 +50,13 @@ export const basketSlice = createSlice({
         (item) => item.id.toString() !== action.payload
       );
     },
+
+    clearBasket(state) {
+      state.items = [];
+    },
   },
 });
 
 // - exporta as funcoes da cesta de produtos que adiciona ou remove itens
-export const { addProduct, removeProduct, deleteProduct } = basketSlice.actions;
+export const { addProduct, removeProduct, deleteProduct, clearBasket } =
+  basketSlice.actions;
