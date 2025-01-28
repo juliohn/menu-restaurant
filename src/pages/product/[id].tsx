@@ -9,6 +9,8 @@ import { addProduct } from "@/store/basket";
 import { api } from "@/api/axios";
 import { ModifierProps, ProductProps } from "@/types";
 
+import { useTranslation } from "react-i18next";
+
 import { ProductItemOption } from "@/components/ProductItemOption";
 import { Modal } from "@/components/Modal";
 import { Loading } from "@/components/Loading";
@@ -22,9 +24,11 @@ interface ProductDetailsInterface {
 }
 
 export default function ProductDetails({ product }: ProductDetailsInterface) {
+  const router = useRouter();
   const { isFallback } = useRouter();
   const dispatch = useAppDispatch();
-  const router = useRouter();
+  const { t } = useTranslation();
+
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const {
@@ -94,8 +98,10 @@ export default function ProductDetails({ product }: ProductDetailsInterface) {
             {product.description}
           </p>
           <div className=" mb-2 py-4">
-            <p className=" text-gray40 text-base font-bold">Choose your size</p>
-            <p className=" text-gray30 font-normal">Select 1 option</p>
+            <p className=" text-gray40 text-base font-bold">
+              {t("choose_your_size")}
+            </p>
+            <p className=" text-gray30 font-normal">{t("select_option")}</p>
           </div>
 
           <div className="flex flex-col gap-4 mb-4">
@@ -126,7 +132,7 @@ export default function ProductDetails({ product }: ProductDetailsInterface) {
             onClick={() => handleAddItem()}
             className="w-full flex justify-center bg-brown500 px-8 py-2  text-white font-bold rounded-3xl"
           >
-            Add to Order <Dot /> {totalPrice}
+            {t("add_to_cart")} <Dot /> {totalPrice}
           </button>
         </div>
       </div>

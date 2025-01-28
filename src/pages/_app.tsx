@@ -11,6 +11,8 @@ import { Footer } from "@/components/Footer";
 import { Loading } from "@/components/Loading";
 import { Header } from "@/components/Header";
 
+import "../i18n";
+
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);

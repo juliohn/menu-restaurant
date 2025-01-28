@@ -3,6 +3,8 @@ import { useState, ChangeEvent, useEffect } from "react";
 import { GetStaticProps } from "next";
 import { ReplyAll } from "lucide-react";
 
+import { useTranslation } from "react-i18next";
+
 // Hooks
 import { useAppDispatch } from "@hooks";
 
@@ -66,6 +68,8 @@ export default function Home({
     drinks: true,
     desserts: true,
   });
+
+  const { t } = useTranslation();
 
   const dispatch = useAppDispatch();
 
@@ -195,7 +199,7 @@ export default function Home({
 
         <div className="hidden md:block md:w-2/5 bg-blue10 shadow-2xl h-full md:ml-6">
           <div className="mb-4 px-4 pt-4">
-            <h2 className="text-gray40 text-2xl font-medium">Carrinho</h2>
+            <h2 className="text-gray40 text-2xl font-medium">{t("cart")}</h2>
           </div>
           <div className="flex-1 overflow-y-auto">
             <ResumeBasket />

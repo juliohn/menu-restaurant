@@ -7,6 +7,8 @@ import {
   deleteProduct,
 } from "@/store/basket";
 
+import { useTranslation } from "react-i18next";
+
 import { Trash } from "lucide-react";
 
 import { useFormatCurrency } from "@/hooks";
@@ -17,6 +19,8 @@ import { QuantityControls } from "@/components/QuantityControls";
 
 export function ResumeBasket() {
   const dispatch = useAppDispatch();
+
+  const { t } = useTranslation();
 
   const basket = useAppSelector((state) => state.basket);
 
@@ -43,7 +47,7 @@ export function ResumeBasket() {
     <div className="w-full flex flex-col bg-blue10 ">
       {items.length === 0 ? (
         <div className="p-4 md:text-start text-center  h-16 text-gray-20 bg-white">
-          Seu carrinho está vazio
+          {t("empty_cart")}
         </div>
       ) : (
         <>
