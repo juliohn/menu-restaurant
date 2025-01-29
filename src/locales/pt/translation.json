@@ -10,6 +10,12 @@
   "select_option": "Selecione 1 opção",
   "clear_basket": "Esvaziar Carrinho",
   "make_order": "Fazer Pedido",
+  "your_basket": "Seu Carrinho",
+  "basket": {
+    "items_one": "item",
+    "items_other": "itens"
+  },
+  "view_allergy_information": "Ver informações de alergias",
   "order_sent": "Pedido enviado com sucesso!",
   "login": {
     "forgot_password": "Esqueci minha senha",

@@ -50,7 +50,7 @@ Os testes são feitos com Jest e React Testing Library.
 - Implementado pagina de contato e login fake apenas para simular a funcionalidade do menu de navegacao
 
 - O projeto foi postado na vercel, e pode ser acessado em:
- https://menu-restaurant-4hct0pd7f-juliohns-projects.vercel.app/
+ https://menu-restaurant-beryl.vercel.app/
 
 ## Licença
 

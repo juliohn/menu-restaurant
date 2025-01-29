@@ -1,7 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
 
-import Link from "next/link";
 import { useRouter } from "next/router";
 
 import { RootState } from "@/store";
@@ -10,6 +10,7 @@ import { Dot } from "lucide-react";
 
 export function Footer() {
   const router = useRouter();
+  const { t } = useTranslation();
 
   const basket = useSelector((state: RootState) => state.basket);
   // - Abre o modal do carrinho no responsivo mobile
@@ -17,12 +18,19 @@ export function Footer() {
     router.push(`/basket`);
   };
 
+  const openAllergyModal = () => {
+    router.push(`/allergy`);
+  };
+
   return (
     <footer className="md:hidden  bg-gray5 mt-4 p-10 items-center">
       <div className="bg-white rounded-md  text-center mb-6">
-        <Link href={"#"} className="text-bold text-primary underline text-base">
-          View allergy information
-        </Link>
+        <button
+          onClick={openAllergyModal}
+          className="text-bold text-primary underline text-base"
+        >
+          {t("view_allergy_information")}
+        </button>
       </div>
 
       {basket.items.length > 0 && (
@@ -31,8 +39,8 @@ export function Footer() {
             onClick={openBasketModal}
             className="w-full flex justify-center bg-brown500 px-8 py-2  text-white font-bold rounded-3xl"
           >
-            Your basket <Dot /> {basket.items.length}{" "}
-            {basket.items.length > 1 ? "items" : "item"}
+            {t("your_basket")} <Dot /> {basket.items.length}{" "}
+            {t("basket.items", { count: basket.items.length })}
           </button>
         </div>
       )}

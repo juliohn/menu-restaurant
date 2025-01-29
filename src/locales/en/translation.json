@@ -16,6 +16,12 @@
   "email": "Email",
   "password": "Password",
   "submit": "Submit",
+  "your_basket": "Your Basket",
+  "basket": {
+    "items_one": "item",
+    "items_other": "items"
+  },
+  "view_allergy_information": "View allergy information",
   "login": {
     "forgot_password": "Forgot Password",
     "remember": "Remember me",
