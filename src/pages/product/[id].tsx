@@ -7,7 +7,7 @@ import { Dot, X } from "lucide-react";
 
 import { addProduct } from "@/store/basket";
 import { api } from "@/api/axios";
-import { ModifierProps, ProductProps } from "@/types";
+import { ModifierProps, ProductProps, ProductDetailsInterface } from "@/types";
 
 import { useTranslation } from "react-i18next";
 
@@ -18,10 +18,6 @@ import { QuantityControls } from "@/components/QuantityControls";
 
 import { useAppDispatch } from "@/hooks";
 import { useProduct } from "@/hooks/useProduct";
-
-interface ProductDetailsInterface {
-  product: ProductProps;
-}
 
 export default function ProductDetails({ product }: ProductDetailsInterface) {
   const router = useRouter();
@@ -55,6 +51,7 @@ export default function ProductDetails({ product }: ProductDetailsInterface) {
       variant: selectedItem.name,
       price: selectedItem.price,
       quantity,
+      identification_quantity: Number(product.id),
     };
 
     dispatch(addProduct(newItem));
@@ -188,19 +185,26 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 
   const normalizedProduct = {
     ...product,
+    identification_quantity: product.id,
     imageUrl: product.images?.[0]?.image || "",
-    modifiers: product.modifiers || [
-      {
-        id: product.id,
-        items: [
+    modifiers: product.modifiers
+      ? product.modifiers.map((modifier: ModifierProps) => ({
+          ...modifier,
+          identification_quantity: product.id,
+        }))
+      : [
           {
             id: product.id,
-            name: product.name,
-            price: product.price,
+            identification_quantity: product.id,
+            items: [
+              {
+                id: product.id,
+                name: product.name,
+                price: product.price,
+              },
+            ],
           },
         ],
-      },
-    ],
   };
 
   return {

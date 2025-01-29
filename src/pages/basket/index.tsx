@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
+import { useTranslation } from "react-i18next";
+
 import { Modal } from "@/components/Modal";
 import { ResumeBasket } from "@/components/ResumeBasket";
 
@@ -9,6 +11,7 @@ import { X } from "lucide-react";
 export default function BasketPage() {
   const router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (router.isReady) {
@@ -26,7 +29,9 @@ export default function BasketPage() {
       <div className="bg-blue10 w-full">
         <div className="w-full bg-white p-4 flex flex-col">
           <div className="p-2 border-b border-gray5">
-            <h1 className="text-lg font-medium text-center">Basket</h1>
+            <h1 className="text-lg font-medium text-center">
+              {t("your_basket")}
+            </h1>
             <button
               onClick={closeModal}
               className="absolute right-4 top-6 text-gray-600 hover:text-gray-900"

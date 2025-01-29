@@ -11,6 +11,7 @@
   "clear_basket": "Esvaziar Carrinho",
   "make_order": "Fazer Pedido",
   "your_basket": "Seu Carrinho",
+  "text_basket": "Carrinho",
   "basket": {
     "items_one": "item",
     "items_other": "itens"
@@ -34,5 +35,8 @@
     "submit": "Enviar Mensagem",
     "success": "FORMULÁRIO ENVIADO COM SUCESSO",
     "successMessage": "Obrigado pelo seu contato!"
+  },
+  "products": {
+    "composition": "Composição dos Produtos"
   }
 }

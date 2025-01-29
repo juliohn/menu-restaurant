@@ -59,7 +59,6 @@ export default function Home({
   productsList,
   whiteLabelConfig,
 }: WhiteLabelProps) {
-  // console.log("===", whiteLabelConfig);
   const [isLoading, setIsLoading] = useState(true);
   const [isActiveCategory, setIsActiveCategory] = useState("all");
   const [searchTerm, setSearchTerm] = useState<string>("");
@@ -78,7 +77,6 @@ export default function Home({
     if (categories && productsList) {
       setIsLoading(false);
     }
-    // console.log("===", whiteLabelConfig);
   }, [categories, productsList, whiteLabelConfig]);
 
   useEffect(() => {
@@ -235,6 +233,7 @@ export const getStaticProps: GetStaticProps<WhiteLabelProps> = async () => {
             {
               id: item.id,
               name: item.name,
+              identification_quantity: Number(item.id),
               minChoices: 1,
               maxChoices: 1,
               items: [
@@ -252,6 +251,7 @@ export const getStaticProps: GetStaticProps<WhiteLabelProps> = async () => {
 
           return {
             ...item,
+            identification_quantity: Number(item.id),
             imageUrl: item.images?.[0]?.image || "",
             modifiers,
             section: section.name.toLowerCase(),

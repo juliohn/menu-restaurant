@@ -1,3 +1,5 @@
+import { ChangeEvent } from "react";
+
 export interface ModifierProps {
   id: string;
   name: string;
@@ -20,6 +22,7 @@ export interface ProductProps {
   modifiers: ModifiersProductProps[];
   images: ImageProps[];
   section: string;
+  identification_quantity: number;
 }
 
 export interface DrinkProps {
@@ -27,6 +30,7 @@ export interface DrinkProps {
   name: string;
   description?: string;
   price: number;
+  identification_quantity: number;
 }
 
 export interface DrinkItemProps {
@@ -95,4 +99,64 @@ export interface MenuSectionProps {
   items: ProductProps[];
   ItemComponent: React.ComponentType<{ item: ProductProps }>;
   filteredItems: ProductProps[];
+}
+
+export interface CategoryProps {
+  id: string;
+  imageUrl: string;
+  name: string;
+  isActive?: boolean;
+  onClick: (id: string) => void;
+}
+
+export interface InputProps extends React.HTMLProps<HTMLInputElement> {
+  value: string;
+  onChange: (event: ChangeEvent<HTMLInputElement>) => void;
+}
+
+export interface ModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  children: React.ReactNode;
+}
+
+export interface ProductItemOptionProps {
+  name: string;
+  price: number;
+  handleOptionChange: (id: string) => void;
+  isSelected: boolean;
+  value: string;
+}
+
+export interface UseProductProps {
+  product: ProductProps;
+  initialQuantity?: number;
+}
+
+export interface ItemProps {
+  item: ProductProps;
+}
+export interface ProductDetailsInterface {
+  product: ProductProps;
+}
+
+export interface BasketItem {
+  id: string;
+  name: string;
+  variant?: string;
+  price: number;
+  quantity: number;
+  identification_quantity: number;
+}
+
+// -  Definição da interface para o estado
+export interface ItemBasketState {
+  items: BasketItem[];
+}
+
+export interface WhiteLabelState {
+  primaryColour: string;
+  navBackgroundColour: string;
+  bannerImage: string;
+  locale: string;
 }

@@ -1,10 +1,6 @@
 import { useState, useMemo } from "react";
 import { useFormatCurrency } from "@/hooks";
-import { ProductProps } from "@/types";
-interface UseProductProps {
-  product: ProductProps;
-  initialQuantity?: number;
-}
+import { UseProductProps } from "@/types";
 
 export function useProduct({ product, initialQuantity = 1 }: UseProductProps) {
   const { formatCurrencyDecimals } = useFormatCurrency();

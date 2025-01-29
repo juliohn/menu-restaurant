@@ -22,6 +22,11 @@ export function Footer() {
     router.push(`/allergy`);
   };
 
+  // Only render the footer if we're on the home page ('/')
+  if (router.pathname !== "/") {
+    return null;
+  }
+
   return (
     <footer className="md:hidden  bg-gray5 mt-4 p-10 items-center">
       <div className="bg-white rounded-md  text-center mb-6">

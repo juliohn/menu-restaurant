@@ -7,7 +7,7 @@ const Login: React.FC = () => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     // Implementar a lógica de autenticação aqui
-    console.log("Form submitted");
+    alert("Form submitted");
   };
 
   return (

@@ -1,7 +1,6 @@
 import { useAppSelector, useAppDispatch } from "@/hooks";
-
+import { BasketItem } from "@/types";
 import {
-  BasketItem,
   addProduct,
   removeProduct,
   deleteProduct,

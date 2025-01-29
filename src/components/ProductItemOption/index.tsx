@@ -1,19 +1,13 @@
 import { useFormatCurrency } from "@/hooks";
+import { ProductItemOptionProps } from "@/types";
 
-interface ProductItemOptionprops {
-  name: string;
-  price: number;
-  handleOptionChange: (id: string) => void;
-  isSelected: boolean;
-  value: string;
-}
 export function ProductItemOption({
   name,
   price,
   handleOptionChange,
   isSelected,
   value,
-}: ProductItemOptionprops) {
+}: ProductItemOptionProps) {
   const { formatCurrencyDecimals } = useFormatCurrency();
 
   return (

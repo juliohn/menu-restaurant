@@ -1,5 +1,6 @@
 import { useMemo } from "react";
-import { BasketItem } from "@/store/basket";
+import { BasketItem } from "@/types";
+
 import { useFormatCurrency } from "@/hooks";
 
 export const useBasketCalculations = (items: BasketItem[]) => {

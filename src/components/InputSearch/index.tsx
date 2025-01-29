@@ -1,11 +1,8 @@
 import { Search } from "lucide-react";
-import { ChangeEvent, memo } from "react";
+import { memo } from "react";
 import { useTranslation } from "react-i18next";
 
-interface InputProps extends React.HTMLProps<HTMLInputElement> {
-  value: string;
-  onChange: (event: ChangeEvent<HTMLInputElement>) => void;
-}
+import { InputProps } from "@/types";
 
 function InputSearchComponent({ value, onChange, ...props }: InputProps) {
   const { t } = useTranslation();

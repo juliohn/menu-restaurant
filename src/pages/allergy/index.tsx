@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { X } from "lucide-react";
 import { Modal } from "@/components/Modal";
+import { useTranslation } from "react-i18next";
 
 const productComposition = {
   hardcore: {
@@ -85,6 +86,7 @@ const productComposition = {
 };
 
 export default function CompositionModal() {
+  const { t } = useTranslation();
   const router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -104,7 +106,7 @@ export default function CompositionModal() {
       <div className="w-full h-full flex flex-col bg-white rounded-lg max-w-md mx-auto">
         <header className="relative p-4 border-b border-gray20">
           <h2 className="text-2xl font-bold text-center">
-            Composição dos Produtos
+            {t("products.composition")}
           </h2>
           <button
             onClick={closeModal}

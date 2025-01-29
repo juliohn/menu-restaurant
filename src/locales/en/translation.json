@@ -17,6 +17,9 @@
   "password": "Password",
   "submit": "Submit",
   "your_basket": "Your Basket",
+
+  "text_basket": "Basket",
+
   "basket": {
     "items_one": "item",
     "items_other": "items"
@@ -39,5 +42,8 @@
     "submit": "Send Message",
     "success": "FORM SUBMITTED SUCCESSFULLY",
     "successMessage": "Thank you for your contact!"
+  },
+  "products": {
+    "composition": "Products Composition"
   }
 }

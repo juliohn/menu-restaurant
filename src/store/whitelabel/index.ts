@@ -1,11 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-interface WhiteLabelState {
-  primaryColour: string;
-  navBackgroundColour: string;
-  bannerImage: string;
-  locale: string;
-}
+import { WhiteLabelState } from "@/types";
 
 const initialState: WhiteLabelState = {
   primaryColour: "#4F372F",

@@ -1,21 +1,8 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-// -  Definição da interface para o item da cesta
-export interface BasketItem {
-  id: string;
-  name: string;
-  variant?: string;
-  price: number;
-  quantity: number;
-}
-
-// -  Definição da interface para o estado
-interface ItemState {
-  items: BasketItem[];
-}
-
+import { ItemBasketState, BasketItem } from "@/types";
 // - Estado inicial
-const initialState: ItemState = {
+const initialState: ItemBasketState = {
   items: [],
 };
 
@@ -45,7 +32,6 @@ export const basketSlice = createSlice({
     },
 
     deleteProduct(state, action: PayloadAction<string>) {
-      console.log("action", action.payload);
       state.items = state.items.filter(
         (item) => item.id.toString() !== action.payload
       );

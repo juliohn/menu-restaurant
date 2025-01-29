@@ -1,13 +1,6 @@
 import Image from "next/image";
 
-interface CategoryProps {
-  id: string;
-  imageUrl: string;
-  name: string;
-  isActive?: boolean;
-  onClick: (id: string) => void;
-}
-
+import { CategoryProps } from "@/types";
 export function Category({
   id,
   imageUrl,
